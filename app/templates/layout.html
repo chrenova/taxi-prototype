@@ -1,0 +1,32 @@
+<!doctype html>
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+<script>Mustache.tags = [ '<%', '%>' ];</script>
+<title>{% block title %}Welcome{% endblock %} | MiniTwit</title>
+<div class="page">
+  <div class="navigation">
+    {% if current_user.is_authenticated %}
+        {{ current_user }}
+    <a href="{{ url_for('index') }}">index</a> |
+    <a href="{{ url_for('logout') }}">sign out [{{ current_user.username }}]</a>
+    {% else %}
+    {# <a href="{{ url_for('register') }}">sign up</a> #}
+    <a href="{{ url_for('login') }}">sign in</a>
+    {% endif %}
+  </div>
+  {% with flashes = get_flashed_messages() %}
+    {% if flashes %}
+      <ul class="flashes">
+      {% for message in flashes %}
+        <li>{{ message }}
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <div class="body">
+  {% block body %}{% endblock %}
+  </div>
+  <div class="footer">
+  </div>
+</div>

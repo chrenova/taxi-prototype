@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {% if current_user.is_authenticated %}
+        {{ current_user }}
+    {% endif %}
+
+<div class="container">
+    <button id="btn">Load</button>
+    <div id="tasks" class="table-responsive"/>
+</div>
+
+<script id="mp_template" type="text/template">
+        <table class="table table-bordered">
+            <%#.%>
+            <tr>
+                <td><% id %></td>
+                <td><% created_at %></td>
+                <td><% created_by %></td>
+                <td><% assigned_to %></td>
+                <td><% origin %></td>
+                <td><% destination %></td>
+                <td><% comments %></td>
+                <td><% status %></td>
+                <td><% archived %></td>
+                <td><% price %></td>
+                <td>
+                    <form action="/start_progress/<% id %>" method="post"><input type="submit" value="Start progress"/></form>
+                    <form action="/finish_task/<% id %>" method="post"><input type="submit" value="Finish task"/></form>
+                    <form action="/archive_task/<% id %>" method="post"><input type="submit" value="Archive task"/></form>
+                </td>
+            </tr>
+            <%/.%>
+        </table>
+</script>
+
+<script>
+function fetch_tasks() {
+        $.getJSON('http://localhost:5000/tasks', function (tasks) {
+            var template = $("#mp_template").html();
+            var text = Mustache.render(template, tasks);
+            $("#tasks").html(text);
+        });
+}
+
+$(function () {
+    $("#btn").on('click', fetch_tasks);
+    fetch_tasks();
+    window.setInterval(fetch_tasks, 10000);
+});
+</script>
+
+{% endblock %}
