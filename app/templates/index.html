@@ -30,6 +30,10 @@
     <div id="tasks" class="table-responsive"/>
 </div>
 
+<div id="start_progress_div" style="display: none;">
+    <
+</div>
+
 <script id="mp_template" type="text/template">
         <table class="table table-bordered">
             <thead>
@@ -54,7 +58,7 @@
                 <td><% assigned_to %></td>
                 <td><% origin %></td>
                 <td><% destination %></td>
-                <td><% comments %></td>
+                <td style="white-space:pre"><% comments %></td>
                 <td><% status %></td>
                 <td><% archived %></td>
                 <td><% price %></td>
@@ -62,6 +66,7 @@
                     <form action="/start_progress/<% id %>" method="post"><input type="submit" value="Start progress"/></form>
                     <form action="/finish_task/<% id %>" method="post"><input type="submit" value="Finish task"/></form>
                     <form action="/archive_task/<% id %>" method="post"><input type="submit" value="Archive task"/></form>
+                    <form action="/comment_task/<% id %>" method="post"><input type="submit" value="Add comment"/></form>
                 </td>
             </tr>
             <%/.%>

@@ -69,3 +69,10 @@ def finish_task(task_id):
 def archive_task(task_id):
     services.update_task_set_archived(flask_login.current_user, task_id)
     return redirect(url_for('index'))
+
+
+@app.route('/comment_task/<task_id>', methods=['POST'])
+@flask_login.login_required
+def comment_task(task_id):
+    services.update_task_add_comment(flask_login.current_user, task_id, '123')
+    return redirect(url_for('index'))

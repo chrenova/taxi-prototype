@@ -51,6 +51,16 @@ def update_task_set_archived(user, task_id):
     db.session.commit()
 
 
+def update_task_add_comment(user, task_id, comment):
+    # TODO lock for update
+    task = models.Task.query.get(task_id)
+    #TODO check rights
+    task_history = _copy_task(task)
+    task.comments = (task.comments + '\n' if task.comments is not None else '') + comment
+    db.session.add(task_history)
+    db.session.commit()
+
+
 def find_active_tasks_for_user(user):
     return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id)
 
