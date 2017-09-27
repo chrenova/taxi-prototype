@@ -7,8 +7,9 @@ from app import app, models, services
 @app.route('/index')
 @flask_login.login_required
 def index():
-    all = models.Task.query.all()
-    return render_template('index.html', data=all)
+    # all = models.Task.query.all()
+    active_users = services.find_active_users()
+    return render_template('index.html', active_users=active_users)
 
 
 @app.route('/tasks')
@@ -35,6 +36,18 @@ def login():
 def logout():
     flask_login.logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/create_task', methods=['POST'])
+@flask_login.login_required
+def create_task():
+    assigned_to_id = request.form['assigned_to_id']
+    assigned_to = services.find_user_by_id(int(assigned_to_id))
+    origin = request.form['origin']
+    destination = request.form['destination']
+    comment = request.form['comment']
+    services.create_task(created_by=flask_login.current_user, assigned_to=assigned_to, origin=origin, destination=destination, comments=comment)
+    return redirect(url_for('index'))
 
 
 @app.route('/start_progress/<task_id>', methods=['POST'])

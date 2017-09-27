@@ -2,8 +2,8 @@ import datetime
 from . import models, db
 
 
-def create_task(created_by, assigned_to, origin, destination, status):
-    task = models.Task(created_by=created_by, assigned_to=assigned_to, origin=origin, destination=destination, status=status, parent_task_id=None)
+def create_task(created_by, assigned_to, origin, destination, comments, status=models.TaskStatus.NEW):
+    task = models.Task(created_by=created_by, assigned_to=assigned_to, origin=origin, destination=destination, status=status, comments=comments, parent_task_id=None)
     db.session.add(task)
     db.session.commit()
     return task
@@ -72,3 +72,9 @@ def valid_login(username, password):
         return user
     else:
         return None
+
+def find_user_by_id(user_id):
+    return models.User.query.get(user_id)
+
+def find_active_users():
+    return models.User.query.filter(models.User.active==True)

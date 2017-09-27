@@ -94,8 +94,8 @@ class Task(db.Model):
         return {
             'id': self.id,
             'created_at': self.created_at,
-#            'created_by': self.created_by,
-#            'assigned_to': self.assigned_to,
+            'created_by': self.created_by.username,
+            'assigned_to': self.assigned_to.username,
             'origin': self.origin,
             'destination': self.destination,
             'comments': self.comments,

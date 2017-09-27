@@ -6,12 +6,46 @@
     {% endif %}
 
 <div class="container">
+{% if current_user.is_admin() %}
+    <div id="create_task">
+        <form action="/create_task" method="POST">
+            Assigned to: 
+            <select name="assigned_to_id" id="assigned_to_id">
+            {% for u in active_users %}
+                <option value="{{ u.id }}">{{ u.username }}</option>
+            {% endfor %}
+            </select>
+            <br/>
+            Origin: <input type="text" name="origin" id="origin"/>
+            <br/>
+            Destination: <input type="text" name="destination" id="destination"/>
+            <br/>
+            Comment: <input type="text" name="comment" id="comment"/>
+            <br/>
+            <input type="submit" value="Create"/>
+        </form>
+    </div>
+{% endif %}
     <button id="btn">Load</button>
     <div id="tasks" class="table-responsive"/>
 </div>
 
 <script id="mp_template" type="text/template">
         <table class="table table-bordered">
+            <thead>
+                <td>ID</td>
+                <td>Created At</td>
+                <td>Created By</td>
+                <td>Assigned To</td>
+                <td>Origin</td>
+                <td>Destination</td>
+                <td>Comments</td>
+                <td>Status</td>
+                <td>Archived</td>
+                <td>Price</td>
+                <td>&nbsp;</td>
+            </thead>
+            <tbody>
             <%#.%>
             <tr>
                 <td><% id %></td>
@@ -31,6 +65,7 @@
                 </td>
             </tr>
             <%/.%>
+            </tbody>
         </table>
 </script>
 
