@@ -1,7 +1,8 @@
 # taxi-prototype
 
 INSTALL  
-python 3.6 -m venv .venv  
+(should be compatible with any python 3 version)  
+python3.6 -m venv .venv  
 source .venv/bin/activate  
 pip install -r requirements.txt  
 
