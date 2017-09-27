@@ -76,7 +76,7 @@ class Task(db.Model):
     comments = db.Column(db.Text)
     status = db.Column(db.Enum(TaskStatus))
     archived = db.Column(db.Boolean, default=False)
-    price = db.Column(db.Numeric)
+    value = db.Column(db.Numeric)
     parent_task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     parent_task = relationship('Task', remote_side=id)
     history = relationship('Task', backref=backref('parent', remote_side=[id], order_by='desc(Task.created_at)'))
@@ -90,7 +90,7 @@ class Task(db.Model):
     def __repr__(self):
         return '<Task {0} {1} {2} {3} {4} {5} {6}>'.format(self.id, self.created_at, self.updated_at, self.status, self.archived, self.parent_task_id, self.history)
 
-    def to_json(self):
+    def to_json(self, user):
         return {
             'id': self.id,
             'created_at': self.created_at,
@@ -101,5 +101,25 @@ class Task(db.Model):
             'comments': self.comments,
             'status': self.status.name,
             'archived': self.archived,
-            'price': self.price
+            'value': self.value,
+            'can_start_progress': self.can_start_progress(user),
+            'can_add_comment': self.can_add_comment(user),
+            'can_finish_task': self.can_finish_task(user),
+            'can_archive_task': self.can_archive_task(user),
+            'can_edit_task': self.can_edit_task(user)
         }
+
+    def can_start_progress(self, user):
+        return (self.assigned_to is None or self.assigned_to == user) and self.status == TaskStatus.NEW
+
+    def can_add_comment(self, user):
+        return (self.assigned_to is None or self.assigned_to == user) or user.is_admin()
+
+    def can_finish_task(self, user):
+        return (self.assigned_to == user and self.status == TaskStatus.PROCESSING) or user.is_admin()
+
+    def can_archive_task(self, user):
+        return self.status == TaskStatus.FINISHED and user.is_admin()
+
+    def can_edit_task(self, user):
+        return user.is_admin()

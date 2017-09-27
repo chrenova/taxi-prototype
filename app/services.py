@@ -56,13 +56,14 @@ def update_task_add_comment(user, task_id, comment):
     task = models.Task.query.get(task_id)
     #TODO check rights
     task_history = _copy_task(task)
-    task.comments = (task.comments + '\n' if task.comments is not None else '') + comment
+    c = task.comments + '\n' if task.comments else ''
+    task.comments = c + comment
     db.session.add(task_history)
     db.session.commit()
 
 
 def find_active_tasks_for_user(user):
-    return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id)
+    return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
 
 
 def find_all_tasks():
@@ -83,8 +84,10 @@ def valid_login(username, password):
     else:
         return None
 
+
 def find_user_by_id(user_id):
     return models.User.query.get(user_id)
+
 
 def find_active_users():
     return models.User.query.filter(models.User.active==True)

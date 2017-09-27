@@ -16,7 +16,7 @@ def index():
 @flask_login.login_required
 def tasks():
     all = services.find_active_tasks_for_user(flask_login.current_user)
-    return jsonify([t.to_json() for t in all])
+    return jsonify([t.to_json(flask_login.current_user) for t in all])
 
 
 @app.route('/login', methods=['GET', 'POST'])

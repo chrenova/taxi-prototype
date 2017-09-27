@@ -12,12 +12,12 @@ def main():
     db.session.add_all([u1, u2, u3, u4])
     db.session.commit()
 
-    t1 = services.create_task(created_by=u1, assigned_to=u2, origin='ba', destination='nr', status=models.TaskStatus.NEW)
-    t2 = services.create_task(created_by=u2, assigned_to=u3, origin='nr', destination='bb', status=models.TaskStatus.PROCESSING)
-    t3 = services.create_task(created_by=u3, assigned_to=u1, origin='ke', destination='po', status=models.TaskStatus.FINISHED)
-    t4 = services.create_task(created_by=u1, assigned_to=u2, origin='ba', destination='nr', status=models.TaskStatus.NEW)
-    t5 = services.create_task(created_by=u2, assigned_to=u3, origin='nr', destination='bb', status=models.TaskStatus.PROCESSING)
-    t6 = services.create_task(created_by=u3, assigned_to=u1, origin='ke', destination='po', status=models.TaskStatus.FINISHED)
+    t1 = services.create_task(created_by=u1, assigned_to=u2, origin='ba', destination='nr', status=models.TaskStatus.NEW, comments='short comment')
+    t2 = services.create_task(created_by=u2, assigned_to=u3, origin='nr', destination='bb', status=models.TaskStatus.PROCESSING, comments='')
+    t3 = services.create_task(created_by=u3, assigned_to=u1, origin='ke', destination='po', status=models.TaskStatus.FINISHED, comments='short comment')
+    t4 = services.create_task(created_by=u1, assigned_to=u2, origin='ba', destination='nr', status=models.TaskStatus.NEW, comments='')
+    t5 = services.create_task(created_by=u2, assigned_to=u3, origin='nr', destination='bb', status=models.TaskStatus.PROCESSING, comments='short comment')
+    t6 = services.create_task(created_by=u3, assigned_to=u1, origin='ke', destination='po', status=models.TaskStatus.FINISHED, comments='')
 
     services.update_task_set_processing(u1, t1.id)
     services.update_task_set_finished(u1, t1.id)

@@ -31,7 +31,6 @@
 </div>
 
 <div id="start_progress_div" style="display: none;">
-    <
 </div>
 
 <script id="mp_template" type="text/template">
@@ -61,12 +60,23 @@
                 <td style="white-space:pre"><% comments %></td>
                 <td><% status %></td>
                 <td><% archived %></td>
-                <td><% price %></td>
+                <td><% value %></td>
                 <td>
+                    <%#can_start_progress %>
                     <form action="/start_progress/<% id %>" method="post"><input type="submit" value="Start progress"/></form>
-                    <form action="/finish_task/<% id %>" method="post"><input type="submit" value="Finish task"/></form>
-                    <form action="/archive_task/<% id %>" method="post"><input type="submit" value="Archive task"/></form>
+                    <%/can_start_progress %>
+                    <%#can_add_comment %>
                     <form action="/comment_task/<% id %>" method="post"><input type="submit" value="Add comment"/></form>
+                    <%/can_add_comment %>
+                    <%#can_finish_task %>
+                    <form action="/finish_task/<% id %>" method="post"><input type="submit" value="Finish task"/></form>
+                    <%/can_finish_task %>
+                    <%#can_archive_task %>
+                    <form action="/archive_task/<% id %>" method="post"><input type="submit" value="Archive task"/></form>
+                    <%/can_archive_task %>
+                    <%#can_edit_task %>
+                    <form action="/edit_task/<% id %>" method="post"><input type="submit" value="Edit task"/></form>
+                    <%/can_edit_task %>
                 </td>
             </tr>
             <%/.%>
