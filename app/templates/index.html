@@ -6,28 +6,63 @@
     {% endif %}
 
 <div class="container">
+
+    <div id="create_task" class="row">
+
+      <div class="col-12">
+      <form action="/create_task" method="POST">
 {% if current_user.is_admin() %}
-    <div id="create_task">
-        <form action="/create_task" method="POST">
-            Assigned to: 
-            <select name="assigned_to_id" id="assigned_to_id">
+      <div class="form-group">
+         <label for="exampleFormControlInput1">Assigned to:</label>
+
+          <select name="assigned_to_id" id="assigned_to_id" class="form-control">
             {% for u in active_users %}
-                <option value="{{ u.id }}">{{ u.username }}</option>
+              <option value="{{ u.id }}">{{ u.username }}</option>
             {% endfor %}
-            </select>
-            <br/>
-            Origin: <input type="text" name="origin" id="origin"/>
-            <br/>
-            Destination: <input type="text" name="destination" id="destination"/>
-            <br/>
-            Comment: <input type="text" name="comment" id="comment"/>
-            <br/>
-            <input type="submit" value="Create"/>
-        </form>
-    </div>
+          </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">
+            Origin:
+        </label>
+
+            <input type="text" name="origin" id="origin" class="form-control"/>
+
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">
+          Destination:
+        </label>
+          <input type="text" name="destination" id="destination" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlInput1">
+          Comment:
+        </labe>
+
+          <input type="text" name="comment" id="comment" class="form-control"/>
+
+      </div>
+      <div class="form-group">
+
+          <input type="submit" value="Create" class="form-control"/>
+
 {% endif %}
-    <button id="btn">Load</button>
-    <div id="tasks" class="table-responsive"/>
+
+          <button id="btn" class="form-control">Load</button>
+
+      </div>
+
+      </form>
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col"
+          <div id="tasks" class="table-responsive"/>
+        </div>
+    </div>
+
 </div>
 
 <div id="start_progress_div" style="display: none;">
@@ -63,19 +98,19 @@
                 <td><% value %></td>
                 <td>
                     <%#can_start_progress %>
-                    <form action="/start_progress/<% id %>" method="post"><input type="submit" value="Start progress"/></form>
+                    <form action="/start_progress/<% id %>" method="post">  <div class="form-group"><input type="submit" value="Start progress" class="form-control"/></div></form>
                     <%/can_start_progress %>
                     <%#can_add_comment %>
-                    <form action="/comment_task/<% id %>" method="post"><input type="submit" value="Add comment"/></form>
+                    <form action="/comment_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Add comment" class="form-control"/></div></form>
                     <%/can_add_comment %>
                     <%#can_finish_task %>
-                    <form action="/finish_task/<% id %>" method="post"><input type="submit" value="Finish task"/></form>
+                    <form action="/finish_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Finish task" class="form-control"/></div></form>
                     <%/can_finish_task %>
                     <%#can_archive_task %>
-                    <form action="/archive_task/<% id %>" method="post"><input type="submit" value="Archive task"/></form>
+                    <form action="/archive_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Archive task" class="form-control"/></div></form>
                     <%/can_archive_task %>
                     <%#can_edit_task %>
-                    <form action="/edit_task/<% id %>" method="post"><input type="submit" value="Edit task"/></form>
+                    <form action="/edit_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Edit task" class="form-control"/></div></form>
                     <%/can_edit_task %>
                 </td>
             </tr>
