@@ -7,17 +7,16 @@ box-sizing: border-box;
 }
 body {
 font-family: Arial;
-background-color: #3498DB;
-padding: 50px;
+#background-color: #3498DB;
+
 }
 .login {
-margin: 20px auto;
-width: 300px;
+
+
 }
 .login-screen {
 background-color: #FFF;
-padding: 20px;
-border-radius: 5px
+
 }
 
 .app-title {
