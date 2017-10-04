@@ -1,0 +1,23 @@
+.row{
+ border: 0px solid;
+ }
+
+
+.row + .row {
+  border-top: 0;
+}
+
+.flx {
+  display: flex;
+}
+
+.inner {
+  background: aliceblue;
+  border-right: 1px solid blue;
+  padding: 10px 15px;
+}
+
+.inner-end {
+  background: aliceblue;
+  padding: 10px 15px;
+}
