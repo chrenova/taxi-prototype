@@ -10,9 +10,14 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>
 <script>Mustache.tags = [ '<%', '%>' ];</script>
 
-<script>Mustache.tags = [ '<%', '%>' ];</script>
 <title>Welcome | MiniTwit</title>
 </head>
 <body  style="">
@@ -29,36 +34,44 @@
         <div class="col-lg-12"><a href="/logout">sign out [qwerty]</a></div>
       </div>
     </div>
-  <div>
-
-  <div id="body" class="container">&lt;User qwerty v body&gt;
+    <div class=col-lg-10>
+  <div id="body" class="container">
       <div id="create_task" class="row">
         <div class="col-12">
-          <form action="/create_task" method="POST">
+          <form class="form-horizontal" action="/create_task" method="POST">
             <div class="form-group">
-              <label for="exampleFormControlInput1">Priradené/Šofér:</label>
-              <select name="assigned_to_id" id="assigned_to_id" class="form-control">
-                  <option value="1">qwerty</option>
-                  <option value="2">asdfgh</option>
-                  <option value="3">zxcvbn</option>
-              </select>
+              <div class="col-sm-12 input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <select class="form-control" name="assigned_to_id" id="assigned_to_id" title="Zvoľ šoféra">
+                    <option value="1" data-icon="glyphicon-user">Miso</option>
+                    <option value="2" data-icon="glyphicon-user">Fero</option>
+                    <option value="3" data-icon="glyphicon-user">Jozo</option>
+                </select>
+              </div>
             </div>
             <div class="form-group">
-              <label for="exampleFormControlInput1">Štart:</label>
-              <input type="text" name="origin" id="origin" class="form-control">
+              <div class="col-sm-12 input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                <input class="form-control" type="text" name="origin" id="origin" placeholder="Štart">
+              </div>
             </div>
             <div class="form-group">
-              <label for="exampleFormControlInput1">Cieľ:</label>
-              <input type="text" name="destination" id="destination" class="form-control">
+              <div class="col-sm-12 input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                <input class="form-control" type="text" name="destination" id="destination" placeholder="Cieľ">
+              </div>
             </div>
             <div class="form-group">
-              <label for="exampleFormControlInput1">Poznámka:</label>
-                <input type="text" name="comment" id="comment" class="form-control">
 
+              <div class="col-sm-12 input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                <input class="form-control" type="text" name="comment" id="comment" placeholder="Poznámka">
+              </div>
             </div>
             <div class="form-group">
-              <input type="button" value="Vytvor" class="form-control" onclick="addOrder()">
-              <button id="btn" class="form-control">Obnov</button>
+              <div class="col-sm-12">
+                <button class="form-control btn btn-default" onclick="addOrder()">Vytvor</button>
+            </div>
             </div>
           </form>
         </div>
@@ -92,18 +105,19 @@
                 <td>nie</td>
                 <td></td>
                 <td>
-                    <div class="form-group" id="assign"><input type="submit"  value="Preber objednávku" class="form-control" onClick="preberObjednavku(this)"></div>
-                    <div class="form-group">
-                      <button type="button"  class="form-control btn" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
-                    </div>
-                    <div class="form-group" id="finish"><input type="submit" value="Objednávka ukončená" class="form-control" onClick="ukonciObjednavku(this)"></div>
-                    <div class="form-group"><input type="submit" value="Edituj" class="form-control" onClick=""></div>
+                  <div class="btn-group-vertical">
+                    <button id="assign" type="submit"  class="btn btn-default btn-md" onClick="preberObjednavku(this)">Preber objednávku</button>
+                    <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
+                    <button id="finish" type="submit"  class="btn btn-default btn-md" onClick="ukonciObjednavku(this)">Objednávka ukončená</button>
+                    <button type="submit"  class="btn btn-default btn-md" onClick="">Edituj</buton>
+                  </div>
                 </td>
             </tr>
             </tbody>
         </table>
+      </div>
 </div>
-    </div>
+
 <!--- modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -123,7 +137,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavri</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
         <button type="button" class="btn btn-primary" onclick="addCommnet()">Pridaj</button>
       </div>
     </div>
@@ -143,17 +157,17 @@
     <td><% assigned_to %></td>
     <td><% origin %></td>
     <td><% destination %></td>
-    <td style="white-space:pre"><% comments %></td>
+    <td style="white-space:pre"><% comment %></td>
     <td id="nezacala1">Nezačala</td>
     <td>nie</td>
     <td></td>
     <td>
-        <div class="form-group" id="assign"><input type="submit"  value="Preber objednávku" class="form-control" onClick="preberObjednavku(this)"></div>
-        <div class="form-group">
-          <button type="button"  class="form-control btn" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
+        <div class="btn-group-vertical">
+          <button id="assign" type="submit"  class="btn btn-default btn-md" onClick="preberObjednavku(this)">Preber objednávku</button>
+          <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
+          <button id="finish" type="submit"  class="btn btn-default btn-md" onClick="ukonciObjednavku(this)">Objednávka ukončená</button>
+          <button type="submit"  class="btn btn-default btn-md" onClick="">Edituj</buton>
         </div>
-        <div class="form-group" id="finish"><input type="submit" value="Objednávka ukončená" class="form-control" onClick="ukonciObjednavku(this)"></div>
-        <div class="form-group"><input type="submit" value="Edituj" class="form-control" onClick=""></div>
     </td>
 </tr>
 </script>
@@ -163,6 +177,7 @@ function addOrder(){
     var origin = $('#origin').val();
     var destination = $('#destination').val();
     var comment = $('#comment').val();
+
     var obj = {
       created_by:'Generálny riaditeľ Michal Huska Predceda',
       assigned_to:assigned_to,
@@ -201,15 +216,7 @@ function ukonciObjednavku(){
   return false;
 }
 
-// $('#addCommnet').on('show.bs.modal', function (event) {
-//   var button = $(event.relatedTarget) // Button that triggered the modal
-//   var recipient = "test";//button.data('whatever') // Extract info from data-* attributes
-//   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-//   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-//   var modal = $(this)
-//   modal.find('.modal-title').text('New message to ' + recipient)
-//   modal.find('.modal-body input').val(recipient)
-// })
+
 </script>
 
 <script id="mp_template" type="text/template">
