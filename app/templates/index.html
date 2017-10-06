@@ -7,81 +7,78 @@
 
 <div class="container">
 
-    <div id="create_task" class="row">
 
-      <div class="col-12">
-      <form action="/create_task" method="POST">
+  <div id="create_task" class="row">
+    <div class="col-12">
 {% if current_user.is_admin() %}
-      <div class="form-group">
-         <label for="exampleFormControlInput1">Assigned to:</label>
-
-          <select name="assigned_to_id" id="assigned_to_id" class="form-control">
-            {% for u in active_users %}
-              <option value="{{ u.id }}">{{ u.username }}</option>
-            {% endfor %}
-          </select>
-      </div>
-      <div class="form-group">
-        <label for="exampleFormControlInput1">
-            Origin:
-        </label>
-
-            <input type="text" name="origin" id="origin" class="form-control"/>
-
-      </div>
-      <div class="form-group">
-        <label for="exampleFormControlInput1">
-          Destination:
-        </label>
-          <input type="text" name="destination" id="destination" class="form-control"/>
-      </div>
-      <div class="form-group">
-        <label for="exampleFormControlInput1">
-          Comment:
-        </labe>
-
-          <input type="text" name="comment" id="comment" class="form-control"/>
-
-      </div>
-      <div class="form-group">
-
-          <input type="submit" value="Create" class="form-control"/>
-
-{% endif %}
-
-          <button id="btn" class="form-control">Load</button>
-
-      </div>
-
-      </form>
-    </div>
-    </div>
-
-    <div class="row">
-        <div class="col"
-          <div id="tasks" class="table-responsive"/>
+      <form class="form-horizontal" action="/create_task" method="POST">
+        <div class="form-group">
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <select class="form-control" name="assigned_to_id" id="assigned_to_id" title="Zvoľ šoféra">
+              {% for u in active_users %}
+                <option value="{{ u.id }}"  data-icon="glyphicon-user">{{ u.username }}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
-    </div>
+        <div class="form-group">
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+            <input class="form-control" type="text" name="origin" id="origin" placeholder="Štart">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+            <input class="form-control" type="text" name="destination" id="destination" placeholder="Cieľ">
+          </div>
+        </div>
+        <div class="form-group">
 
-</div>
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+            <input class="form-control" type="text" name="comment" id="comment" placeholder="Poznámka">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <button class="form-control btn btn-default" type="submit">Vytvor</button>
+        </div>
+        </div>
+      </form>
+{% endif %}
+    </div>
+  </div>
+
+
+
+  <!-- **************************   -->
+
+  <div class="row">
+      <div class="col">
+          <div id="tasks"></div>
+    </div>
+  </div>
 
 <div id="start_progress_div" style="display: none;">
 </div>
 
 <script id="mp_template" type="text/template">
+<!-- *************************** -->
         <table class="table table-bordered">
             <thead>
-                <td>ID</td>
-                <td>Created At</td>
-                <td>Created By</td>
-                <td>Assigned To</td>
-                <td>Origin</td>
-                <td>Destination</td>
-                <td>Comments</td>
-                <td>Status</td>
-                <td>Archived</td>
-                <td>Price</td>
-                <td>&nbsp;</td>
+              <tr><td>Poradie</td>
+              <td>Vytvorené</td>
+              <td>Zadal</td>
+              <td>Priradené</td>
+              <td>Štart</td>
+              <td>Cieľ</td>
+              <td>Komentár</td>
+              <td>Stav</td>
+              <td>Archivovaná</td>
+              <td>Cena</td>
+              <td>&nbsp;</td>
             </thead>
             <tbody>
             <%#.%>
@@ -92,26 +89,40 @@
                 <td><% assigned_to %></td>
                 <td><% origin %></td>
                 <td><% destination %></td>
-                <td style="white-space:pre"><% comments %></td>
-                <td><% status %></td>
+                <td style="white-space:pre" class="koment"><% comments %></td>
+                <td class="nezacala"><% status %></td>
                 <td><% archived %></td>
                 <td><% value %></td>
                 <td>
+                  <div class="btn-group-vertical">
                     <%#can_start_progress %>
-                    <form action="/start_progress/<% id %>" method="post">  <div class="form-group"><input type="submit" value="Start progress" class="form-control"/></div></form>
+                    <form action="/start_progress/<% id %>" method="post">
+                      <button type="button"  class="btn btn-default btn-md" id="addCommnet">Preber</button>
+                    </form>
+                    <form action="/start_progress/<% id %>" method="post">
+                      <button id="finish" type="submit"  class="btn btn-default btn-md">Preber1</button>
+                    </form>
                     <%/can_start_progress %>
                     <%#can_add_comment %>
-                    <form action="/comment_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Add comment" class="form-control"/></div></form>
+                    <form action="/comment_task/<% id %>" method="post">
+                      <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
+                    </form>
                     <%/can_add_comment %>
                     <%#can_finish_task %>
-                    <form action="/finish_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Finish task" class="form-control"/></div></form>
+                    <form action="/finish_task/<% id %>" method="post">
+                      <button id="finish" type="submit"  class="btn btn-default btn-md">Objednávka ukončená</button>
+                    </form>
                     <%/can_finish_task %>
                     <%#can_archive_task %>
-                    <form action="/archive_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Archive task" class="form-control"/></div></form>
+                    <form action="/archive_task/<% id %>" method="post">
+                      <button type="submit"  class="btn btn-default btn-md">Archivuj</buton>
+                    </form>
                     <%/can_archive_task %>
                     <%#can_edit_task %>
-                    <form action="/edit_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Edit task" class="form-control"/></div></form>
+                    <form action="/edit_task/<% id %>" method="post">
+                      <button type="submit"  class="btn btn-default btn-md">Edituj</buton>
                     <%/can_edit_task %>
+                    </div>
                 </td>
             </tr>
             <%/.%>
@@ -133,6 +144,64 @@ $(function () {
     fetch_tasks();
     window.setInterval(fetch_tasks, 10000);
 });
+</script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Komentár:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
+        <button type="button" class="btn btn-primary" id="add-comment-btn">Pridaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('#exampleModal').on('show.bs.modal', function(e) {
+  $('#message-text').val("");
+  $('#add-comment-btn').unbind();
+  $('#add-comment-btn').on('click', function(){
+    addCommnet(e.relatedTarget);
+    $(e.relatedTarget).addClass("btn-info");
+    //todo sem by malo prist ajaxove volanie ulozenia komentaru
+  });
+
+
+});
+</script>
+<!-- moDAL -->
+
+<script>
+
+function addCommnet(element){
+  var commentEl = $(element).closest('td').siblings('.koment');
+  var previousText = commentEl.html();
+
+  var addedText = $('#message-text').val();
+  if(previousText){
+      commentEl.html(previousText);
+      commentEl.append("<br/>").append(addedText);
+  }
+  else{
+    commentEl.append(addedText);
+  }
+  $('#exampleModal').modal('toggle');
+}
+
 </script>
 
 {% endblock %}
