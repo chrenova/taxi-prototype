@@ -20,23 +20,23 @@ def update_task(task_id):
     db.session.commit()
 
 
-def update_task_set_processing(user, task_id):
+def update_task_status(user, task_id, status):
     #TODO lock for update
     task = models.Task.query.get(task_id)
     #TODO check rights
     task_history = _copy_task(task)
-    task.status = models.TaskStatus.PROCESSING
-    task.assigned_to_id = user.id
-    db.session.add(task_history)
-    db.session.commit()
 
+    if status == models.TaskStatus.NEW:
+        pass
+    elif status == models.TaskStatus.PROCESSING:
+        task.status = models.TaskStatus.PROCESSING
+        task.assigned_to_id = user.id
+        print('done')
+    elif status == models.TaskStatus.FINISHED:
+        task.status = models.TaskStatus.FINISHED
+    else:
+        pass
 
-def update_task_set_finished(user, task_id):
-    #TODO lock for update
-    task = models.Task.query.get(task_id)
-    #TODO check rights
-    task_history = _copy_task(task)
-    task.status = models.TaskStatus.FINISHED
     db.session.add(task_history)
     db.session.commit()
 
@@ -63,7 +63,10 @@ def update_task_add_comment(user, task_id, comment):
 
 
 def find_active_tasks_for_user(user):
-    return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
+    if user.is_admin():
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.archived==False)
+    else:
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
 
 
 def find_all_tasks():

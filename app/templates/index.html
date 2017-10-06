@@ -61,6 +61,8 @@
     </div>
   </div>
 
+</div>
+
 <div id="start_progress_div" style="display: none;">
 </div>
 
@@ -94,33 +96,21 @@
                 <td><% archived %></td>
                 <td><% value %></td>
                 <td>
-                  <div class="btn-group-vertical">
+                    <div class="btn-group-vertical">
                     <%#can_start_progress %>
-                    <form action="/start_progress/<% id %>" method="post">
-                      <button type="button"  class="btn btn-default btn-md" id="addCommnet">Preber</button>
-                    </form>
-                    <form action="/start_progress/<% id %>" method="post">
-                      <button id="finish" type="submit"  class="btn btn-default btn-md">Preber1</button>
-                    </form>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startProgressModal" data-task_id="<% id %>">Priradit mne</button>
                     <%/can_start_progress %>
                     <%#can_add_comment %>
-                    <form action="/comment_task/<% id %>" method="post">
-                      <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
-                    </form>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal" data-task_id="<% id %>">Pridat komentár</button>
                     <%/can_add_comment %>
                     <%#can_finish_task %>
-                    <form action="/finish_task/<% id %>" method="post">
-                      <button id="finish" type="submit"  class="btn btn-default btn-md">Objednávka ukončená</button>
-                    </form>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishTaskModal" data-task_id="<% id %>">Ukoncit</button>
                     <%/can_finish_task %>
                     <%#can_archive_task %>
-                    <form action="/archive_task/<% id %>" method="post">
-                      <button type="submit"  class="btn btn-default btn-md">Archivuj</buton>
-                    </form>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#archiveTaskModal" data-task_id="<% id %>">Archivovat</button>
                     <%/can_archive_task %>
                     <%#can_edit_task %>
-                    <form action="/edit_task/<% id %>" method="post">
-                      <button type="submit"  class="btn btn-default btn-md">Edituj</buton>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editTaskModal" data-task_id="<% id %>">Editovat</button>
                     <%/can_edit_task %>
                     </div>
                 </td>
@@ -132,10 +122,13 @@
 
 <script>
 function fetch_tasks() {
-        $.getJSON('http://localhost:5000/tasks', function (tasks) {
+        $.getJSON('/api/tasks', function (tasks) {
             var template = $("#mp_template").html();
             var text = Mustache.render(template, tasks);
             $("#tasks").html(text);
+        })
+        .fail(function(xhr, status) {
+            console.log("Failed: " + status);
         });
 }
 
@@ -144,9 +137,89 @@ $(function () {
     fetch_tasks();
     window.setInterval(fetch_tasks, 10000);
 });
+
+function add_comment(task_id, comment) {
+    data = {'comment': comment};
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tasks/' + task_id + '/comment',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(function(xhr, status) {
+        console.log('Done: ' + status);
+        $('#addCommentModal').modal('hide');
+        fetch_tasks();
+    })
+    .fail(function(xhr, status) {
+        console.log('Fail: ' + status);
+        $('#errorMessage').text('FAIL');
+    });
+}
+
+function start_progress(task_id, comment) {
+    data = {'comment': comment, 'status': 'PROCESSING'};
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tasks/' + task_id + '/status',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(function(xhr, status) {
+        console.log('Done: ' + status);
+        $('#startProgressModal').modal('hide');
+        fetch_tasks();
+    })
+    .fail(function(xhr, status) {
+        console.log('Fail: ' + status);
+        $('#errorMessage').text('FAIL');
+    });
+}
+
+function finish_task(task_id, comment) {
+    data = {'comment': comment, 'status': 'FINISHED'};
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tasks/' + task_id + '/status',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(function(xhr, status) {
+        console.log('Done: ' + status);
+        $('#finishTaskModal').modal('hide');
+        fetch_tasks();
+    })
+    .fail(function(xhr, status) {
+        console.log('Fail: ' + status);
+        $('#errorMessage').text('FAIL');
+    });
+}
+
+function archive_task(task_id, comment) {
+    data = {'comment': comment};
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tasks/' + task_id + '/archived',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(function(xhr, status) {
+        console.log('Done: ' + status);
+        $('#archiveTaskModal').modal('hide');
+        fetch_tasks();
+    })
+    .fail(function(xhr, status) {
+        console.log('Fail: ' + status);
+        $('#errorMessage').text('FAIL');
+    });
+}
 </script>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -156,6 +229,7 @@ $(function () {
         </button>
       </div>
       <div class="modal-body">
+          <span id="errorMessage"></span>
         <form>
           <div class="form-group">
             <label for="message-text" class="form-control-label">Komentár:</label>
@@ -165,28 +239,146 @@ $(function () {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="add-comment-btn">Pridaj</button>
+        <button type="button" class="btn btn-primary" id="addCommentSubmit">Pridaj</button>
       </div>
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="startProgressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <span id="errorMessage"></span>
+        <form>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Komentár:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
+        <button type="button" class="btn btn-primary" id="startProgressSubmit">Pridaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="finishTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <span id="errorMessage"></span>
+        <form>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Komentár:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
+        <button type="button" class="btn btn-primary" id="finishTaskSubmit">Pridaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="archiveTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <span id="errorMessage"></span>
+        <form>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Komentár:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
+        <button type="button" class="btn btn-primary" id="archiveTaskSubmit">Pridaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-$('#exampleModal').on('show.bs.modal', function(e) {
+$('#addCommentModal').on('show.bs.modal', function(event) {
   $('#message-text').val("");
-  $('#add-comment-btn').unbind();
-  $('#add-comment-btn').on('click', function(){
-    addCommnet(e.relatedTarget);
-    $(e.relatedTarget).addClass("btn-info");
+  $('#addCommentSubmit').unbind();
+  $('#addCommentSubmit').on('click', function(){
+    var button = $(event.relatedTarget);
+    var task_id = button.data('task_id');
+    //addCommnet(event.relatedTarget);
+    $(event.relatedTarget).addClass("btn-info");
     //todo sem by malo prist ajaxove volanie ulozenia komentaru
+    add_comment(task_id, $('#message-text').val());
   });
-
-
 });
+
+$('#startProgressModal').on('show.bs.modal', function(event) {
+  $('#message-text').val("");
+  $('#startProgressSubmit').unbind();
+  $('#startProgressSubmit').on('click', function(){
+    var button = $(event.relatedTarget);
+    var task_id = button.data('task_id');
+    //addCommnet(event.relatedTarget);
+    $(event.relatedTarget).addClass("btn-info");
+    //todo sem by malo prist ajaxove volanie ulozenia komentaru
+    start_progress(task_id, $('#message-text').val());
+  });
+});
+
+$('#finishTaskModal').on('show.bs.modal', function(event) {
+  $('#message-text').val("");
+  $('#finishTaskSubmit').unbind();
+  $('#finishTaskSubmit').on('click', function(){
+    var button = $(event.relatedTarget);
+    var task_id = button.data('task_id');
+    //addCommnet(event.relatedTarget);
+    $(event.relatedTarget).addClass("btn-info");
+    //todo sem by malo prist ajaxove volanie ulozenia komentaru
+    finish_task(task_id, $('#message-text').val());
+  });
+});
+
+$('#archiveTaskModal').on('show.bs.modal', function(event) {
+  $('#message-text').val("");
+  $('#archiveTaskSubmit').unbind();
+  $('#archiveTaskSubmit').on('click', function(){
+    var button = $(event.relatedTarget);
+    var task_id = button.data('task_id');
+    //addCommnet(event.relatedTarget);
+    $(event.relatedTarget).addClass("btn-info");
+    //todo sem by malo prist ajaxove volanie ulozenia komentaru
+    archive_task(task_id, $('#message-text').val());
+  });
+});
+
 </script>
-<!-- moDAL -->
 
 <script>
-
 function addCommnet(element){
   var commentEl = $(element).closest('td').siblings('.koment');
   var previousText = commentEl.html();
@@ -201,7 +393,6 @@ function addCommnet(element){
   }
   $('#exampleModal').modal('toggle');
 }
-
 </script>
 
 {% endblock %}

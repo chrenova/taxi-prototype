@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, make_response
 import flask_login
 from app import app, models, services
 
@@ -10,13 +10,6 @@ def index():
     # all = models.Task.query.all()
     active_users = services.find_active_users()
     return render_template('index.html', active_users=active_users)
-
-
-@app.route('/tasks')
-@flask_login.login_required
-def tasks():
-    all = services.find_active_tasks_for_user(flask_login.current_user)
-    return jsonify([t.to_json(flask_login.current_user) for t in all])
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -38,6 +31,36 @@ def logout():
     return redirect(url_for('login'))
 
 
+'''
+API:
+GET /api/tasks
+fetch list of tasks for current user
+POST /api/tasks
+create a new task
+PUT /api/tasks/{task_identifier}/status
+{'status': 'FINISHED'}
+update status of a given task
+PUT /api/tasks/{task_identifier}/comment
+{'comment': 'comment'}
+create a new comment for a given task
+PUT /api/tasks/{task_identifier}/archived
+{}
+archive task
+'''
+
+@app.route('/api/tasks', methods=['GET'])
+@flask_login.login_required
+def tasks():
+    all = services.find_active_tasks_for_user(flask_login.current_user)
+    return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
+
+
+@app.route('/api/tasks', methods=['POST'])
+@flask_login.login_required
+def create_new_task():
+    return make_response(jsonify(), 201)
+
+
 @app.route('/create_task', methods=['POST'])
 @flask_login.login_required
 def create_task():
@@ -50,29 +73,29 @@ def create_task():
     return redirect(url_for('index'))
 
 
-@app.route('/start_progress/<task_id>', methods=['POST'])
+@app.route('/api/tasks/<task_id>/status', methods=['PUT'])
 @flask_login.login_required
-def start_progress(task_id):
-    services.update_task_set_processing(flask_login.current_user, task_id)
-    return redirect(url_for('index'))
+def update_task_status(task_id):
+    data = request.get_json()
+    #TODO validate
+    status = data['status']
+    status_enum = models.TaskStatus[status]
+    services.update_task_status(flask_login.current_user, task_id, status_enum)
+    return make_response(jsonify(), 200)
 
 
-@app.route('/finish_task/<task_id>', methods=['POST'])
-@flask_login.login_required
-def finish_task(task_id):
-    services.update_task_set_finished(flask_login.current_user, task_id)
-    return redirect(url_for('index'))
-
-
-@app.route('/archive_task/<task_id>', methods=['POST'])
+@app.route('/api/tasks/<task_id>/archived', methods=['PUT'])
 @flask_login.login_required
 def archive_task(task_id):
     services.update_task_set_archived(flask_login.current_user, task_id)
-    return redirect(url_for('index'))
+    return make_response(jsonify(), 200)
 
 
-@app.route('/comment_task/<task_id>', methods=['POST'])
+@app.route('/api/tasks/<task_id>/comment', methods=['PUT'])
 @flask_login.login_required
 def comment_task(task_id):
-    services.update_task_add_comment(flask_login.current_user, task_id, '123')
-    return redirect(url_for('index'))
+    data = request.get_json()
+    if data and 'comment' in data:
+        comment = data['comment']
+        services.update_task_add_comment(flask_login.current_user, task_id, comment)
+    return make_response(jsonify(), 200)
