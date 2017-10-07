@@ -20,7 +20,7 @@ def update_task(task_id):
     db.session.commit()
 
 
-def update_task_status(user, task_id, status):
+def update_task_status(user, task_id, status, **kwargs):
     #TODO lock for update
     task = models.Task.query.get(task_id)
     #TODO check rights
@@ -31,11 +31,16 @@ def update_task_status(user, task_id, status):
     elif status == models.TaskStatus.PROCESSING:
         task.status = models.TaskStatus.PROCESSING
         task.assigned_to_id = user.id
-        print('done')
     elif status == models.TaskStatus.FINISHED:
         task.status = models.TaskStatus.FINISHED
+        if 'price' in kwargs:
+            task.value = kwargs['price']
     else:
         pass
+
+    if 'comment' in kwargs:
+        c = task.comments + '\n' if task.comments else ''
+        task.comments = c + kwargs['comment']
 
     db.session.add(task_history)
     db.session.commit()

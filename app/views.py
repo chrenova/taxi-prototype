@@ -1,6 +1,13 @@
 from flask import render_template, request, redirect, url_for, jsonify, make_response
 import flask_login
-from app import app, models, services
+from app import app, models, services, babel
+from config import LANGUAGES
+
+
+@babel.localeselector
+def get_locale():
+    # return request.accept_languages.best_match(LANGUAGES.keys())
+    return 'sk'
 
 
 @app.route('/')
@@ -73,14 +80,21 @@ def create_task():
     return redirect(url_for('index'))
 
 
-@app.route('/api/tasks/<task_id>/status', methods=['PUT'])
+@app.route('/api/tasks/<task_id>/status/processing', methods=['PUT'])
 @flask_login.login_required
-def update_task_status(task_id):
+def update_task_status_processing(task_id):
     data = request.get_json()
     #TODO validate
-    status = data['status']
-    status_enum = models.TaskStatus[status]
-    services.update_task_status(flask_login.current_user, task_id, status_enum)
+    services.update_task_status(flask_login.current_user, task_id, models.TaskStatus.PROCESSING, comment=data.get('comment'))
+    return make_response(jsonify(), 200)
+
+
+@app.route('/api/tasks/<task_id>/status/finished', methods=['PUT'])
+@flask_login.login_required
+def update_task_status_finished(task_id):
+    data = request.get_json()
+    #TODO validate
+    services.update_task_status(flask_login.current_user, task_id, models.TaskStatus.FINISHED, comment=data.get('comment'), price=data.get('price'))
     return make_response(jsonify(), 200)
 
 

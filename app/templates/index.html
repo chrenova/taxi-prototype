@@ -25,25 +25,25 @@
         <div class="form-group">
           <div class="col-sm-12 input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="origin" id="origin" placeholder="Štart">
+            <input class="form-control" type="text" name="origin" id="origin" placeholder="{{ _('Origin') }}">
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-12 input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="destination" id="destination" placeholder="Cieľ">
+            <input class="form-control" type="text" name="destination" id="destination" placeholder="{{ _('Destination') }}">
           </div>
         </div>
         <div class="form-group">
 
           <div class="col-sm-12 input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="comment" id="comment" placeholder="Poznámka">
+            <input class="form-control" type="text" name="comment" id="comment" placeholder="{{ _('Comment') }}">
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-12">
-            <button class="form-control btn btn-default" type="submit">Vytvor</button>
+            <button class="form-control btn btn-default" type="submit">{{ _('CreateTask') }}</button>
         </div>
         </div>
       </form>
@@ -58,7 +58,7 @@
   <div class="row">
       <div class="col">
           <div id="tasks"></div>
-    </div>
+      </div>
   </div>
 
 </div>
@@ -66,23 +66,27 @@
 <div id="start_progress_div" style="display: none;">
 </div>
 
+
+{% if current_user.is_admin() %}
 <script id="mp_template" type="text/template">
 <!-- *************************** -->
-        <table class="table table-bordered">
-            <thead>
-              <tr><td>Poradie</td>
-              <td>Vytvorené</td>
-              <td>Zadal</td>
-              <td>Priradené</td>
-              <td>Štart</td>
-              <td>Cieľ</td>
-              <td>Komentár</td>
-              <td>Stav</td>
-              <td>Archivovaná</td>
-              <td>Cena</td>
-              <td>&nbsp;</td>
-            </thead>
-            <tbody>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>{{ _('Id') }}</td>
+                <td>{{ _('CreatedAt') }}</td>
+                <td>{{ _('CreatedBy') }}</td>
+                <td>{{ _('Assignee') }}</td>
+                <td>{{ _('Origin') }}</td>
+                <td>{{ _('Destination') }}</td>
+                <td>{{ _('Comments') }}</td>
+                <td>{{ _('Status') }}</td>
+                <td>{{ _('Archived') }}</td>
+                <td>{{ _('Price') }}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
             <%#.%>
             <tr>
                 <td><% id %></td>
@@ -92,33 +96,78 @@
                 <td><% origin %></td>
                 <td><% destination %></td>
                 <td style="white-space:pre" class="koment"><% comments %></td>
-                <td class="nezacala"><% status %></td>
+                <td class="nezacala"><% status_localized %></td>
                 <td><% archived %></td>
                 <td><% value %></td>
                 <td>
                     <div class="btn-group-vertical">
                     <%#can_start_progress %>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startProgressModal" data-task_id="<% id %>">Priradit mne</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startProgressModal" data-task_id="<% id %>">{{ _('AssignToMe') }}</button>
                     <%/can_start_progress %>
                     <%#can_add_comment %>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal" data-task_id="<% id %>">Pridat komentár</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal" data-task_id="<% id %>">{{ _('AddComment') }}</button>
                     <%/can_add_comment %>
                     <%#can_finish_task %>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishTaskModal" data-task_id="<% id %>">Ukoncit</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishTaskModal" data-task_id="<% id %>">{{ _('FinishTask') }}</button>
                     <%/can_finish_task %>
                     <%#can_archive_task %>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#archiveTaskModal" data-task_id="<% id %>">Archivovat</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#archiveTaskModal" data-task_id="<% id %>">{{ _('Archive') }}</button>
                     <%/can_archive_task %>
                     <%#can_edit_task %>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editTaskModal" data-task_id="<% id %>">Editovat</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editTaskModal" data-task_id="<% id %>">{{ _('EditTask') }}</button>
                     <%/can_edit_task %>
                     </div>
                 </td>
             </tr>
             <%/.%>
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 </script>
+{% else %}
+<script id="mp_template" type="text/template">
+<!-- *************************** -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>{{ _('CreatedAt') }}</td>
+                <td>{{ _('Assignee') }}</td>
+                <td>{{ _('Origin') }}</td>
+                <td>{{ _('Destination') }}</td>
+                <td>{{ _('Comments') }}</td>
+                <td>{{ _('Status') }}</td>
+                <td>{{ _('Price') }}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            <%#.%>
+            <tr>
+                <td><% created_at %></td>
+                <td><% assigned_to %></td>
+                <td><% origin %></td>
+                <td><% destination %></td>
+                <td style="white-space:pre" class="koment"><% comments %></td>
+                <td class="nezacala"><% status_localized %></td>
+                <td><% value %></td>
+                <td>
+                    <div class="btn-group-vertical">
+                    <%#can_start_progress %>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startProgressModal" data-task_id="<% id %>">{{ _('AssignToMe') }}</button>
+                    <%/can_start_progress %>
+                    <%#can_add_comment %>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCommentModal" data-task_id="<% id %>">{{ _('AddComment') }}</button>
+                    <%/can_add_comment %>
+                    <%#can_finish_task %>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finishTaskModal" data-task_id="<% id %>">{{ _('FinishTask') }}</button>
+                    <%/can_finish_task %>
+                    </div>
+                </td>
+            </tr>
+            <%/.%>
+        </tbody>
+    </table>
+</script>
+{% endif %}
 
 <script>
 function fetch_tasks() {
@@ -159,10 +208,10 @@ function add_comment(task_id, comment) {
 }
 
 function start_progress(task_id, comment) {
-    data = {'comment': comment, 'status': 'PROCESSING'};
+    data = {'comment': comment};
     $.ajax({
         type: 'PUT',
-        url: '/api/tasks/' + task_id + '/status',
+        url: '/api/tasks/' + task_id + '/status/processing',
         data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json'
@@ -178,11 +227,11 @@ function start_progress(task_id, comment) {
     });
 }
 
-function finish_task(task_id, comment) {
-    data = {'comment': comment, 'status': 'FINISHED'};
+function finish_task(task_id, comment, price) {
+    data = {'comment': comment, 'price': price};
     $.ajax({
         type: 'PUT',
-        url: '/api/tasks/' + task_id + '/status',
+        url: '/api/tasks/' + task_id + '/status/finished',
         data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json'
@@ -223,8 +272,8 @@ function archive_task(task_id, comment) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+        <h5 class="modal-title" id="exampleModalLabel">{{ _('AddComment') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -232,14 +281,14 @@ function archive_task(task_id, comment) {
           <span id="errorMessage"></span>
         <form>
           <div class="form-group">
-            <label for="message-text" class="form-control-label">Komentár:</label>
+            <label for="message-text" class="form-control-label">{{ _('Comment') }}:</label>
             <textarea class="form-control" id="message-text"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="addCommentSubmit">Pridaj</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+        <button type="button" class="btn btn-primary" id="addCommentSubmit">{{ _('Submit') }}</button>
       </div>
     </div>
   </div>
@@ -249,8 +298,8 @@ function archive_task(task_id, comment) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+        <h5 class="modal-title" id="exampleModalLabel">{{ _('StartProgress') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -258,14 +307,14 @@ function archive_task(task_id, comment) {
           <span id="errorMessage"></span>
         <form>
           <div class="form-group">
-            <label for="message-text" class="form-control-label">Komentár:</label>
+            <label for="message-text" class="form-control-label">{{ _('Comment') }}:</label>
             <textarea class="form-control" id="message-text"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="startProgressSubmit">Pridaj</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+        <button type="button" class="btn btn-primary" id="startProgressSubmit">{{ _('Submit') }}</button>
       </div>
     </div>
   </div>
@@ -275,8 +324,8 @@ function archive_task(task_id, comment) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+        <h5 class="modal-title" id="exampleModalLabel">{{ _('FinishTask') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -284,14 +333,18 @@ function archive_task(task_id, comment) {
           <span id="errorMessage"></span>
         <form>
           <div class="form-group">
-            <label for="message-text" class="form-control-label">Komentár:</label>
+            <label for="message-text" class="form-control-label">{{ _('Comment') }}:</label>
             <textarea class="form-control" id="message-text"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="price" class="form-control-label">{{ _('Price') }}:</label>
+            <input type="text" class="form-control" id="price"/>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="finishTaskSubmit">Pridaj</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+        <button type="button" class="btn btn-primary" id="finishTaskSubmit">{{ _('Submit') }}</button>
       </div>
     </div>
   </div>
@@ -301,8 +354,8 @@ function archive_task(task_id, comment) {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+        <h5 class="modal-title" id="exampleModalLabel">{{ _('ArchiveTask') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -310,14 +363,14 @@ function archive_task(task_id, comment) {
           <span id="errorMessage"></span>
         <form>
           <div class="form-group">
-            <label for="message-text" class="form-control-label">Komentár:</label>
+            <label for="message-text" class="form-control-label">{{ _('Comment') }}:</label>
             <textarea class="form-control" id="message-text"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="archiveTaskSubmit">Pridaj</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+        <button type="button" class="btn btn-primary" id="archiveTaskSubmit">{{ _('Submit') }}</button>
       </div>
     </div>
   </div>
@@ -352,6 +405,7 @@ $('#startProgressModal').on('show.bs.modal', function(event) {
 
 $('#finishTaskModal').on('show.bs.modal', function(event) {
   $('#message-text').val("");
+  $('#price').val("");
   $('#finishTaskSubmit').unbind();
   $('#finishTaskSubmit').on('click', function(){
     var button = $(event.relatedTarget);
@@ -359,7 +413,7 @@ $('#finishTaskModal').on('show.bs.modal', function(event) {
     //addCommnet(event.relatedTarget);
     $(event.relatedTarget).addClass("btn-info");
     //todo sem by malo prist ajaxove volanie ulozenia komentaru
-    finish_task(task_id, $('#message-text').val());
+    finish_task(task_id, $('#message-text').val(), $('#price').val());
   });
 });
 
