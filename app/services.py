@@ -2,6 +2,13 @@ import datetime
 from . import models, db
 
 
+def create_user(username, password, admin, active):
+    user = models.User(username=username, password=password, admin=admin, active=active)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
 def create_task(created_by, assigned_to, origin, destination, comments, status=models.TaskStatus.NEW):
     task = models.Task(created_by=created_by, assigned_to=assigned_to, origin=origin, destination=destination, status=status, comments=comments, parent_task_id=None)
     db.session.add(task)
