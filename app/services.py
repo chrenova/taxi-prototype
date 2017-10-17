@@ -2,6 +2,13 @@ import datetime
 from . import models, db
 
 
+def create_user(username, password, admin, active):
+    user = models.User(username=username, password=password, admin=admin, active=active)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
 def create_task(created_by, assigned_to, origin, destination, comments, status=models.TaskStatus.NEW):
     task = models.Task(created_by=created_by, assigned_to=assigned_to, origin=origin, destination=destination, status=status, comments=comments, parent_task_id=None)
     db.session.add(task)
@@ -20,23 +27,28 @@ def update_task(task_id):
     db.session.commit()
 
 
-def update_task_set_processing(user, task_id):
+def update_task_status(user, task_id, status, **kwargs):
     #TODO lock for update
     task = models.Task.query.get(task_id)
     #TODO check rights
     task_history = _copy_task(task)
-    task.status = models.TaskStatus.PROCESSING
-    task.assigned_to_id = user.id
-    db.session.add(task_history)
-    db.session.commit()
 
+    if status == models.TaskStatus.NEW:
+        pass
+    elif status == models.TaskStatus.PROCESSING:
+        task.status = models.TaskStatus.PROCESSING
+        task.assigned_to_id = user.id
+    elif status == models.TaskStatus.FINISHED:
+        task.status = models.TaskStatus.FINISHED
+        if 'price' in kwargs:
+            task.value = kwargs['price']
+    else:
+        pass
 
-def update_task_set_finished(user, task_id):
-    #TODO lock for update
-    task = models.Task.query.get(task_id)
-    #TODO check rights
-    task_history = _copy_task(task)
-    task.status = models.TaskStatus.FINISHED
+    if 'comment' in kwargs:
+        c = task.comments + '\n' if task.comments else ''
+        task.comments = c + kwargs['comment']
+
     db.session.add(task_history)
     db.session.commit()
 
@@ -63,7 +75,10 @@ def update_task_add_comment(user, task_id, comment):
 
 
 def find_active_tasks_for_user(user):
-    return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
+    if user.is_admin():
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.archived==False)
+    else:
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
 
 
 def find_all_tasks():

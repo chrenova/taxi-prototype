@@ -1,15 +1,17 @@
 {% extends "layout.html" %}
-{% block title %}{{ _('SignIn') }}{% endblock %}
+{% block title %}{{ _('SignUp') }}{% endblock %}
 {% block body %}
-  <h2>{{ _('SignIn') }}</h2>
+  <h2>{{ _('SignUp') }}</h2>
   {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
-  <form action="" method="post" name="login">
+  <form action="" method="post" name="register">
     {{ form.csrf_token }}
     <dl>
       <dt>{{ form.username.label }}
       <dd>{{ form.username(size=20) }}
       <dt>{{ form.password.label }}
       <dd>{{ form.password(size=20) }}
+      <dt>{{ form.confirm_password.label }}
+      <dd>{{ form.confirm_password(size=20) }}
     </dl>
     <div class="actions">{{ form.submit(size=20) }}</div>
   </form>

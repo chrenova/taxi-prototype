@@ -1,12 +1,12 @@
 import binascii
 import os
 import enum
-from flask import abort, g
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship, backref
 from . import db, login_manager
 from datetime import datetime
+from flask_babel import lazy_gettext as _
 
 
 class User(UserMixin, db.Model):
@@ -56,9 +56,9 @@ def load_user(user_id):
 
 
 class TaskStatus(enum.Enum):
-    NEW = 0
-    PROCESSING = 1
-    FINISHED = 2
+    NEW = _('TaskStatus.NEW')
+    PROCESSING = _('TaskStatus.PROCESSING')
+    FINISHED = _('TaskStatus.FINISHED')
 
 
 class Task(db.Model):
@@ -76,7 +76,7 @@ class Task(db.Model):
     comments = db.Column(db.Text)
     status = db.Column(db.Enum(TaskStatus))
     archived = db.Column(db.Boolean, default=False)
-    value = db.Column(db.Numeric)
+    value = db.Column(db.Numeric(6, 2))
     parent_task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     parent_task = relationship('Task', remote_side=id)
     history = relationship('Task', backref=backref('parent', remote_side=[id], order_by='desc(Task.created_at)'))
@@ -100,8 +100,9 @@ class Task(db.Model):
             'destination': self.destination,
             'comments': self.comments,
             'status': self.status.name,
+            'status_localized': self.status.value,
             'archived': self.archived,
-            'value': self.value,
+            'value': str(self.value) if self.value is not None else None,
             'can_start_progress': self.can_start_progress(user),
             'can_add_comment': self.can_add_comment(user),
             'can_finish_task': self.can_finish_task(user),
