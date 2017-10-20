@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block scripts %}
-  <script src="{{url_for('static', filename='app.js')}}"></script>
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -10,7 +11,7 @@
     {% endif %}
 
 <div class="container">
-
+<script>console.log(moment('2012-12-31T23:55:13Z').format('LLLL'));</script>
 
   <div id="create_task" class="row">
     <div class="col-12">
@@ -80,13 +81,16 @@
                 <td>{{ _('Id') }}</td>
                 <td>{{ _('CreatedAt') }}</td>
                 <td>{{ _('CreatedBy') }}</td>
+                <td>{{ _('PlannedAt') }}</td>
                 <td>{{ _('Assignee') }}</td>
                 <td>{{ _('Origin') }}</td>
                 <td>{{ _('Destination') }}</td>
                 <td>{{ _('Comments') }}</td>
                 <td>{{ _('Status') }}</td>
                 <td>{{ _('Archived') }}</td>
-                <td>{{ _('Price') }}</td>
+                <td>{{ _('EstimatedPrice') }}</td>
+                <td>{{ _('RealPrice') }}</td>
+                <td>{{ _('TimeToArrive') }}</td>
                 <td>&nbsp;</td>
             </tr>
         </thead>
@@ -96,13 +100,16 @@
                 <td><% id %></td>
                 <td><% created_at %></td>
                 <td><% created_by %></td>
+                <td><% planned_at %></td>
                 <td><% assigned_to %></td>
                 <td><% origin %></td>
                 <td><% destination %></td>
                 <td style="white-space:pre" class="koment"><% comments %></td>
                 <td class="nezacala"><% status_localized %></td>
                 <td><% archived %></td>
-                <td><% value %></td>
+                <td><% estimated_price %></td>
+                <td><% real_price %></td>
+                <td><% time_to_arrive %></td>
                 <td>
                     <div class="btn-group-vertical">
                     <%#can_start_progress %>
@@ -134,12 +141,15 @@
         <thead>
             <tr>
                 <td>{{ _('CreatedAt') }}</td>
+                <td>{{ _('PlannedAt') }}</td>
                 <td>{{ _('Assignee') }}</td>
                 <td>{{ _('Origin') }}</td>
                 <td>{{ _('Destination') }}</td>
                 <td>{{ _('Comments') }}</td>
                 <td>{{ _('Status') }}</td>
-                <td>{{ _('Price') }}</td>
+                <td>{{ _('EstimatedPrice') }}</td>
+                <td>{{ _('RealPrice') }}</td>
+                <td>{{ _('TimeToArrive') }}</td>
                 <td>&nbsp;</td>
             </tr>
         </thead>
@@ -147,12 +157,15 @@
             <%#.%>
             <tr>
                 <td><% created_at %></td>
+                <td><% planned_at %></td>
                 <td><% assigned_to %></td>
                 <td><% origin %></td>
                 <td><% destination %></td>
                 <td style="white-space:pre" class="koment"><% comments %></td>
                 <td class="nezacala"><% status_localized %></td>
-                <td><% value %></td>
+                <td><% estimated_price %></td>
+                <td><% real_price %></td>
+                <td><% time_to_arrive %></td>
                 <td>
                     <div class="btn-group-vertical">
                     <%#can_start_progress %>

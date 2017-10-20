@@ -9,15 +9,38 @@ def create_user(username, password, admin, active):
     return user
 
 
-def create_task(created_by, assigned_to, origin, destination, comments, status=models.TaskStatus.NEW):
-    task = models.Task(created_by=created_by, assigned_to=assigned_to, origin=origin, destination=destination, status=status, comments=comments, parent_task_id=None)
+def create_task(created_by, planned_at, assigned_to, origin, destination, comments, estimated_price, time_to_arrive, status=models.TaskStatus.NEW):
+    if planned_at is None:
+        planned_at = datetime.datetime.utcnow()
+    task = models.Task(
+        created_by=created_by,
+        planned_at=planned_at,
+        assigned_to=assigned_to,
+        origin=origin,
+        destination=destination,
+        status=status,
+        comments=comments,
+        parent_task_id=None,
+        estimated_price=estimated_price,
+        time_to_arrive=time_to_arrive
+    )
     db.session.add(task)
     db.session.commit()
     return task
 
 
 def _copy_task(task):
-    return models.Task(created_by=task.created_by, assigned_to=task.assigned_to, origin=task.origin, destination=task.destination, status=task.status, parent_task_id=task.id)
+    return models.Task(
+        created_by=task.created_by,
+        planned_at=task.planned_at,
+        assigned_to=task.assigned_to,
+        origin=task.origin,
+        destination=task.destination,
+        status=task.status,
+        parent_task_id=task.id,
+        estimated_price=task.estimated_price,
+        time_to_arrive=task.time_to_arrive
+    )
 
 
 def update_task(task_id):
@@ -41,7 +64,7 @@ def update_task_status(user, task_id, status, **kwargs):
     elif status == models.TaskStatus.FINISHED:
         task.status = models.TaskStatus.FINISHED
         if 'price' in kwargs:
-            task.value = kwargs['price']
+            task.real_price = kwargs['price']
     else:
         pass
 
