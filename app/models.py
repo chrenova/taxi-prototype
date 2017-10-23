@@ -57,6 +57,7 @@ def load_user(user_id):
 
 class TaskStatus(enum.Enum):
     NEW = _('TaskStatus.NEW')
+    CLAIMED = _('TaskStatus.CLAIMED')
     PROCESSING = _('TaskStatus.PROCESSING')
     FINISHED = _('TaskStatus.FINISHED')
 
@@ -113,25 +114,48 @@ class Task(db.Model):
             'archived': self.archived,
             'real_price': str(self.real_price) if self.real_price is not None else None,
             'estimated_price': str(self.estimated_price) if self.estimated_price is not None else None,
-            'time_to_arrive': self.time_to_arrive_calculated,
-            'can_start_progress': self.can_start_progress(user),
-            'can_add_comment': self.can_add_comment(user),
-            'can_finish_task': self.can_finish_task(user),
-            'can_archive_task': self.can_archive_task(user),
-            'can_edit_task': self.can_edit_task(user)
+            'time_to_arrive': self.time_to_arrive,
+            'time_to_arrive_calculated': self.time_to_arrive_calculated,
+            'available_actions': ','.join(self.available_actions(user))
         }
 
-    def can_start_progress(self, user):
+    def available_actions(self, user):
+        actions = list()
+        if user.is_admin():
+            actions.append('can_edit')
+        else:
+            if self.can_claim(user):
+                actions.append('can_claim')
+            if self.can_start_progress(user):
+                actions.append('can_start_progress')
+            if self.can_request_call_customer(user):
+                actions.append('can_request_call_customer')
+            if self.can_request_call_me(user):
+                actions.append('can_request_call_me')
+            if self.can_change_route(user):
+                actions.append('can_change_route')
+            if self.can_finish_task(user):
+                actions.append('can_finish_task')
+
+        return actions
+
+    def can_claim(self, user):
         return (self.assigned_to is None or self.assigned_to == user) and self.status == TaskStatus.NEW
 
-    def can_add_comment(self, user):
-        return (self.assigned_to is None or self.assigned_to == user) or user.is_admin()
+    def can_start_progress(self, user):
+        return self.assigned_to == user and self.status == TaskStatus.CLAIMED
+
+    def can_request_call_customer(self, user):
+        return self.assigned_to == user and self.status == TaskStatus.CLAIMED
+
+    def can_request_call_me(self, user):
+        return self.assigned_to == user and self.status == TaskStatus.CLAIMED
+
+    def can_change_route(self, user):
+        return self.assigned_to == user and self.status == TaskStatus.CLAIMED
 
     def can_finish_task(self, user):
-        return (self.assigned_to == user and self.status == TaskStatus.PROCESSING) or user.is_admin()
-
-    def can_archive_task(self, user):
-        return self.status == TaskStatus.FINISHED and user.is_admin()
+        return (self.assigned_to == user and self.status == TaskStatus.PROCESSING)
 
     def can_edit_task(self, user):
         return user.is_admin()
