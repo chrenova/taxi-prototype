@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-10 22:06+0200\n"
+"POT-Creation-Date: 2017-10-24 00:21+0200\n"
 "PO-Revision-Date: 2017-10-07 20:37+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -23,106 +23,117 @@ msgid "TaskStatus.NEW"
 msgstr ""
 
 #: app/models.py:60
-msgid "TaskStatus.PROCESSING"
+msgid "TaskStatus.CLAIMED"
 msgstr ""
 
 #: app/models.py:61
+msgid "TaskStatus.PROCESSING"
+msgstr ""
+
+#: app/models.py:62
 msgid "TaskStatus.FINISHED"
 msgstr ""
 
-#: app/templates/index.html:32 app/templates/index.html:84
-#: app/templates/index.html:138
+#: app/templates/index.html:28 app/templates/index.html:81
+#: app/templates/index.html:129
 msgid "Origin"
 msgstr "Origin"
 
-#: app/templates/index.html:38 app/templates/index.html:85
-#: app/templates/index.html:139
+#: app/templates/index.html:34 app/templates/index.html:82
+#: app/templates/index.html:130
 msgid "Destination"
 msgstr "Destination"
 
-#: app/templates/index.html:45 app/templates/index.html:190
-#: app/templates/index.html:216 app/templates/index.html:242
-#: app/templates/index.html:272
+#: app/templates/index.html:41
 msgid "Comment"
 msgstr ""
 
-#: app/templates/index.html:50
+#: app/templates/index.html:46
 msgid "CreateTask"
 msgstr ""
 
-#: app/templates/index.html:80
+#: app/templates/index.html:76
 msgid "Id"
 msgstr "Id"
 
-#: app/templates/index.html:81 app/templates/index.html:136
+#: app/templates/index.html:77 app/templates/index.html:126
 msgid "CreatedAt"
 msgstr "Created At"
 
-#: app/templates/index.html:82
+#: app/templates/index.html:78
 msgid "CreatedBy"
 msgstr "Created By"
 
-#: app/templates/index.html:83 app/templates/index.html:137
+#: app/templates/index.html:79 app/templates/index.html:127
+msgid "PlannedAt"
+msgstr ""
+
+#: app/templates/index.html:80 app/templates/index.html:128
 msgid "Assignee"
 msgstr "Assignee"
 
-#: app/templates/index.html:86 app/templates/index.html:140
+#: app/templates/index.html:83 app/templates/index.html:131
 msgid "Comments"
 msgstr "Comments"
 
-#: app/templates/index.html:87 app/templates/index.html:141
+#: app/templates/index.html:84 app/templates/index.html:132
 msgid "Status"
 msgstr "Status"
 
-#: app/templates/index.html:88
+#: app/templates/index.html:85
 msgid "Archived"
 msgstr "Archived"
 
-#: app/templates/index.html:89 app/templates/index.html:142
-#: app/templates/index.html:246
-msgid "Price"
-msgstr "Price"
-
-#: app/templates/index.html:109 app/templates/index.html:159
-msgid "AssignToMe"
+#: app/templates/index.html:86 app/templates/index.html:133
+msgid "EstimatedPrice"
 msgstr ""
 
-#: app/templates/index.html:112 app/templates/index.html:162
-#: app/templates/index.html:181
-msgid "AddComment"
+#: app/templates/index.html:87
+msgid "RealPrice"
 msgstr ""
 
-#: app/templates/index.html:115 app/templates/index.html:165
-#: app/templates/index.html:233
-msgid "FinishTask"
+#: app/templates/index.html:88
+msgid "TimeToArrive"
 msgstr ""
 
-#: app/templates/index.html:118
-msgid "Archive"
+#: app/templates/index.html:89 app/templates/index.html:134
+msgid "TimeToArriveCalculated"
 msgstr ""
 
-#: app/templates/index.html:121
-msgid "EditTask"
+#: app/templates/index.html:112
+msgid "Edit"
 msgstr ""
 
-#: app/templates/index.html:182 app/templates/index.html:196
-#: app/templates/index.html:208 app/templates/index.html:222
-#: app/templates/index.html:234 app/templates/index.html:252
-#: app/templates/index.html:264 app/templates/index.html:278
+#: app/templates/index.html:152 app/templates/index.html:167
+msgid "SelectAction"
+msgstr ""
+
+#: app/templates/index.html:168
 msgid "Cancel"
 msgstr ""
 
-#: app/templates/index.html:197 app/templates/index.html:223
-#: app/templates/index.html:253 app/templates/index.html:279
-msgid "Submit"
+#: app/templates/index.html:176
+msgid "Claim"
 msgstr ""
 
-#: app/templates/index.html:207
+#: app/templates/index.html:177
 msgid "StartProgress"
 msgstr ""
 
-#: app/templates/index.html:263
-msgid "ArchiveTask"
+#: app/templates/index.html:178
+msgid "RequestCallCustomer"
+msgstr ""
+
+#: app/templates/index.html:179
+msgid "RequestCallMe"
+msgstr ""
+
+#: app/templates/index.html:180
+msgid "ChangeRoute"
+msgstr ""
+
+#: app/templates/index.html:181
+msgid "Finish"
 msgstr ""
 
 #: app/templates/layout.html:24
@@ -140,5 +151,29 @@ msgid "SignIn"
 msgstr ""
 
 #~ msgid "TaskStatus.%(status)s"
+#~ msgstr ""
+
+#~ msgid "Price"
+#~ msgstr "Price"
+
+#~ msgid "AssignToMe"
+#~ msgstr ""
+
+#~ msgid "AddComment"
+#~ msgstr ""
+
+#~ msgid "FinishTask"
+#~ msgstr ""
+
+#~ msgid "Archive"
+#~ msgstr ""
+
+#~ msgid "EditTask"
+#~ msgstr ""
+
+#~ msgid "Submit"
+#~ msgstr ""
+
+#~ msgid "ArchiveTask"
 #~ msgstr ""
 

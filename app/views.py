@@ -112,7 +112,19 @@ def create_task():
     origin = request.form['origin']
     destination = request.form['destination']
     comment = request.form['comment']
-    services.create_task(created_by=flask_login.current_user, assigned_to=assigned_to, origin=origin, destination=destination, comments=comment)
+    estimated_price = request.form['estimated_price']
+    time_to_arrive = request.form['time_to_arrive']
+    planned_at = None  # FIXME
+    services.create_task(
+        created_by=flask_login.current_user,
+        planned_at=planned_at,
+        assigned_to=assigned_to,
+        origin=origin,
+        destination=destination,
+        comments=comment,
+        estimated_price=estimated_price,
+        time_to_arrive=time_to_arrive
+    )
     return redirect(url_for('index'))
 
 

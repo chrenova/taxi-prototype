@@ -98,8 +98,34 @@ function archive_task(task_id, comment) {
     });
 }
 
+$('#actionModal').on('shown.bs.modal', function(event) {
+    console.log('SHOWN');
+    var button = $(event.relatedTarget);
+    var task_id = button.data('task_id');
+    console.log(task_id);
+    var available_actions_str = button.data('available_actions');
+    console.log(available_actions_str);
+    var available_actions = available_actions_str.split(',');
+    if (available_actions.includes('can_claim') === true) {
+        $('#claimSubmit').show();
+    }
+    if (available_actions.includes('can_start_progress') === true) {
+        $('#startProgressSubmit').show();
+    }
+    if (available_actions.includes('can_request_call_customer') === true) {
+        $('#requestCallCustomerSubmit').show();
+    }
+    if (available_actions.includes('can_request_call_me') === true) {
+        $('#requestCallMeSubmit').show();
+    }
+    if (available_actions.includes('can_change_route') === true) {
+        $('#changeRouteSubmit').show();
+    }
+    if (available_actions.includes('can_finish_task') === true) {
+        $('#finishSubmit').show();
+    }
 
-$('#addCommentModal').on('show.bs.modal', function(event) {
+/*
   $('#message-text').val("");
   $('#addCommentSubmit').unbind();
   $('#addCommentSubmit').on('click', function(){
@@ -110,46 +136,16 @@ $('#addCommentModal').on('show.bs.modal', function(event) {
     //todo sem by malo prist ajaxove volanie ulozenia komentaru
     add_comment(task_id, $('#message-text').val());
   });
-});
-
-$('#startProgressModal').on('show.bs.modal', function(event) {
-  $('#message-text').val("");
-  $('#startProgressSubmit').unbind();
-  $('#startProgressSubmit').on('click', function(){
-    var button = $(event.relatedTarget);
-    var task_id = button.data('task_id');
-    //addCommnet(event.relatedTarget);
-    $(event.relatedTarget).addClass("btn-info");
-    //todo sem by malo prist ajaxove volanie ulozenia komentaru
-    start_progress(task_id, $('#message-text').val());
-  });
-});
-
-$('#finishTaskModal').on('show.bs.modal', function(event) {
-  $('#message-text').val("");
-  $('#price').val("");
-  $('#finishTaskSubmit').unbind();
-  $('#finishTaskSubmit').on('click', function(){
-    var button = $(event.relatedTarget);
-    var task_id = button.data('task_id');
-    //addCommnet(event.relatedTarget);
-    $(event.relatedTarget).addClass("btn-info");
-    //todo sem by malo prist ajaxove volanie ulozenia komentaru
-    finish_task(task_id, $('#message-text').val(), $('#price').val());
-  });
-});
-
-$('#archiveTaskModal').on('show.bs.modal', function(event) {
-  $('#message-text').val("");
-  $('#archiveTaskSubmit').unbind();
-  $('#archiveTaskSubmit').on('click', function(){
-    var button = $(event.relatedTarget);
-    var task_id = button.data('task_id');
-    //addCommnet(event.relatedTarget);
-    $(event.relatedTarget).addClass("btn-info");
-    //todo sem by malo prist ajaxove volanie ulozenia komentaru
-    archive_task(task_id, $('#message-text').val());
-  });
+*/
+})
+.on('show.bs.modal', function(event) {
+    console.log('SHOW');
+    $('#claimSubmit').hide();
+    $('#finishSubmit').hide();
+    $('#startProgressSubmit').hide();
+    $('#requestCallCustomerSubmit').hide();
+    $('#requestCallMeSubmit').hide();
+    $('#changeRouteSubmit').hide();
 });
 
 
