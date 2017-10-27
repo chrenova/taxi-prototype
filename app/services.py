@@ -9,13 +9,14 @@ def create_user(username, password, admin, active):
     return user
 
 
-def create_task(created_by, planned_at, assigned_to, origin, destination, comments, estimated_price, time_to_arrive, status=models.TaskStatus.NEW):
+def create_task(created_by, planned_at, assigned_to_id, origin, destination, comments, estimated_price, time_to_arrive, status=models.TaskStatus.NEW):
     if planned_at is None:
         planned_at = datetime.datetime.utcnow()
+    print('estimated_price: {}, time_to_arrive: {}'.format(estimated_price, time_to_arrive))
     task = models.Task(
         created_by=created_by,
         planned_at=planned_at,
-        assigned_to=assigned_to,
+        assigned_to_id=assigned_to_id,
         origin=origin,
         destination=destination,
         status=status,
@@ -43,9 +44,21 @@ def _copy_task(task):
     )
 
 
-def update_task(task_id):
+def update_task(task_id, created_by, planned_at, assigned_to_id, origin, destination, comments, estimated_price, real_price, time_to_arrive, status):
     task = models.Task.query.get(task_id)
     task_history = _copy_task(task)
+
+    task.created_by = created_by
+    task.planned_at = planned_at
+    task.assigned_to_id = assigned_to_id
+    task.origin = origin
+    task.destination = destination
+    task.comments = comments
+    task.estimated_price = estimated_price
+    task.real_price = real_price
+    task.time_to_arrive = time_to_arrive
+    task.status = status
+
     db.session.add(task_history)
     db.session.commit()
 
@@ -106,6 +119,10 @@ def find_active_tasks_for_user(user):
 
 def find_all_tasks():
     return models.Task.query.filter(models.Task.parent_task==None)
+
+
+def get_task(id, user):
+    return models.Task.query.get(id)
 
 
 def is_user_admin(user_id):

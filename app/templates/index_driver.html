@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {% if current_user.is_authenticated %}
+        {{ current_user }}
+    {% endif %}
+
+<script>console.log(moment('2012-12-31T23:55:13Z').format('LLLL'));</script>
+<div class="container">
+
+  <div class="row">
+      <div class="col">
+          <div id="tasks"></div>
+      </div>
+  </div>
+
+</div>
+
+<div id="start_progress_div" style="display: none;">
+</div>
+
+
+<script id="mp_template" type="text/template">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>{{ _('CreatedAt') }}</td>
+                <td>{{ _('PlannedAt') }}</td>
+                <td>{{ _('Assignee') }}</td>
+                <td>{{ _('Origin') }}</td>
+                <td>{{ _('Destination') }}</td>
+                <td>{{ _('Comments') }}</td>
+                <td>{{ _('Status') }}</td>
+                <td>{{ _('EstimatedPrice') }}</td>
+                <td>{{ _('TimeToArriveCalculated') }}</td>
+                <td>&nbsp;</td>
+            </tr>
+        </thead>
+        <tbody>
+            <%#.%>
+            <tr>
+                <td><% created_at %></td>
+                <td><% planned_at %></td>
+                <td><% assigned_to %></td>
+                <td><% origin %></td>
+                <td><% destination %></td>
+                <td style="white-space:pre" class="koment"><% comments %></td>
+                <td class="nezacala"><% status_localized %></td>
+                <td><% estimated_price %></td>
+                <td><% time_to_arrive_calculated %> min</td>
+                <td>
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#actionModal" data-task_id="<% id %>" data-available_actions="<% available_actions %>">{{ _('SelectAction') }}</button>
+                    </div>
+                </td>
+            </tr>
+            <%/.%>
+        </tbody>
+    </table>
+</script>
+
+
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ _('SelectAction') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <span id="errorMessage"></span>
+        <form>
+          <div class="form-group">
+            <input type="hidden" id="task_id"/>
+            <button type="button" class="btn btn-primary" id="claimSubmit" style="display:none">{{ _('Claim') }}</button>
+            <button type="button" class="btn btn-primary" id="startProgressSubmit" style="display:none">{{ _('StartProgress') }}</button>
+            <button type="button" class="btn btn-primary" id="requestCallCustomerSubmit" style="display:none">{{ _('RequestCallCustomer') }}</button>
+            <button type="button" class="btn btn-primary" id="requestCallMeSubmit" style="display:none">{{ _('RequestCallMe') }}</button>
+            <button type="button" class="btn btn-primary" id="changeRouteSubmit" style="display:none">{{ _('ChangeRoute') }}</button>
+            <button type="button" class="btn btn-primary" id="finishSubmit" style="display:none">{{ _('Finish') }}</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="{{url_for('static', filename='app.js')}}"></script>
+<script>
+var tasks_global = [];
+function process_tasks(data) {
+    tasks_global = data;
+    var template = $("#mp_template").html();
+    var text = Mustache.render(template, tasks_global);
+    $("#tasks").html(text);
+}
+function run_periodically() {
+    fetch_tasks(process_tasks);
+    console.log(tasks_global);
+}
+$(function () {
+    fetch_tasks(process_tasks);
+    window.setInterval(run_periodically, 10000);
+});
+</script>
+{% endblock %}

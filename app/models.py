@@ -49,6 +49,13 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
 
+    def to_json(self, user):
+        return {
+            'id': self.id,
+            'username': self.username
+        }
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -60,6 +67,7 @@ class TaskStatus(enum.Enum):
     CLAIMED = _('TaskStatus.CLAIMED')
     PROCESSING = _('TaskStatus.PROCESSING')
     FINISHED = _('TaskStatus.FINISHED')
+    CANCELLED = _('TaskStatus.CANCELLED')
 
 
 class Task(db.Model):
@@ -80,7 +88,7 @@ class Task(db.Model):
     archived = db.Column(db.Boolean, default=False)
     real_price = db.Column(db.Numeric(6, 2))
     estimated_price = db.Column(db.Numeric(6, 2))
-    time_to_arrive = db.Column(db.Integer)
+    time_to_arrive = db.Column(db.Integer, default=0)
     parent_task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     parent_task = relationship('Task', remote_side=id)
     history = relationship('Task', backref=backref('parent', remote_side=[id], order_by='desc(Task.created_at)'))
@@ -93,7 +101,8 @@ class Task(db.Model):
 
     @property
     def time_to_arrive_calculated(self):
-        td = self.planned_at.timestamp() - datetime.utcnow().timestamp() + timedelta(minutes=self.time_to_arrive).total_seconds()
+        planned = self.planned_at if self.planned_at is not None else self.created_at
+        td = planned.timestamp() - datetime.utcnow().timestamp() + timedelta(minutes=self.time_to_arrive).total_seconds()
         return td // 60
 
     def __repr__(self):
@@ -105,7 +114,8 @@ class Task(db.Model):
             'created_at': self.created_at,
             'created_by': self.created_by.username,
             'planned_at': self.planned_at,
-            'assigned_to': self.assigned_to.username,
+            'assigned_to': self.assigned_to.username if self.assigned_to is not None else None,
+            'assigned_to_id': self.assigned_to_id,
             'origin': self.origin,
             'destination': self.destination,
             'comments': self.comments,

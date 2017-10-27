@@ -1,7 +1,7 @@
-from flask import render_template, request, redirect, url_for, jsonify, make_response, flash
+from flask import render_template, request, redirect, url_for, flash
 import flask_login
-from app import app, models, services, babel, forms
-from config import LANGUAGES
+from app import app, services, babel, forms
+# from config import LANGUAGES
 
 
 @babel.localeselector
@@ -65,43 +65,37 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    form = forms.CreateTaskForm()
+    if form.validate_on_submit():
+        flash('Created!!!')
+        return redirect(url_for('login'))
+
+    if form.errors:
+        flash(form.errors)
+
+    return redirect(url_for('index'))
+
+
 @app.route('/')
 @app.route('/index')
 @flask_login.login_required
 def index():
-    # all = models.Task.query.all()
-    active_users = services.find_active_users()
-    return render_template('index.html', active_users=active_users)
+    if flask_login.current_user.is_admin():
+        return render_template('index_dispatcher.html')
+    else:
+        return render_template('index_driver.html')
 
 
-'''
-API:
-GET /api/tasks
-fetch list of tasks for current user
-POST /api/tasks
-create a new task
-PUT /api/tasks/{task_identifier}/status
-{'status': 'FINISHED'}
-update status of a given task
-PUT /api/tasks/{task_identifier}/comment
-{'comment': 'comment'}
-create a new comment for a given task
-PUT /api/tasks/{task_identifier}/archived
-{}
-archive task
-'''
-
-@app.route('/api/tasks', methods=['GET'])
+@app.route('/edit_form/<task_id>', methods=['GET'])
 @flask_login.login_required
-def tasks():
-    all = services.find_active_tasks_for_user(flask_login.current_user)
-    return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
-
-
-@app.route('/api/tasks', methods=['POST'])
-@flask_login.login_required
-def create_new_task():
-    return make_response(jsonify(), 201)
+def edit_form(task_id):
+    task = services.get_task(task_id, flask_login.current_user)
+    form = forms.CreateTaskForm(obj=task)
+    # form.origin = task.origin
+    form.assigned_to.choices = []
+    return render_template('edit_form.html', form=form)
 
 
 @app.route('/create_task', methods=['POST'])
@@ -126,38 +120,3 @@ def create_task():
         time_to_arrive=time_to_arrive
     )
     return redirect(url_for('index'))
-
-
-@app.route('/api/tasks/<task_id>/status/processing', methods=['PUT'])
-@flask_login.login_required
-def update_task_status_processing(task_id):
-    data = request.get_json()
-    #TODO validate
-    services.update_task_status(flask_login.current_user, task_id, models.TaskStatus.PROCESSING, comment=data.get('comment'))
-    return make_response(jsonify(), 200)
-
-
-@app.route('/api/tasks/<task_id>/status/finished', methods=['PUT'])
-@flask_login.login_required
-def update_task_status_finished(task_id):
-    data = request.get_json()
-    #TODO validate
-    services.update_task_status(flask_login.current_user, task_id, models.TaskStatus.FINISHED, comment=data.get('comment'), price=data.get('price'))
-    return make_response(jsonify(), 200)
-
-
-@app.route('/api/tasks/<task_id>/archived', methods=['PUT'])
-@flask_login.login_required
-def archive_task(task_id):
-    services.update_task_set_archived(flask_login.current_user, task_id)
-    return make_response(jsonify(), 200)
-
-
-@app.route('/api/tasks/<task_id>/comment', methods=['PUT'])
-@flask_login.login_required
-def comment_task(task_id):
-    data = request.get_json()
-    if data and 'comment' in data:
-        comment = data['comment']
-        services.update_task_add_comment(flask_login.current_user, task_id, comment)
-    return make_response(jsonify(), 200)
