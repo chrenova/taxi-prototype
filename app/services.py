@@ -146,3 +146,12 @@ def find_user_by_id(user_id):
 
 def find_active_users():
     return models.User.query.filter(models.User.active==True)
+
+
+def find_unseen_messages():
+    return models.Message.query.filter(models.Message.seen==False)
+
+
+def update_messages_as_seen():
+    models.Message.query.update({models.Message.seen: True})
+    db.session.commit()

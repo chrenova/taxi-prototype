@@ -18,6 +18,15 @@ function fetch_users(callback) {
         });
 }
 
+function fetch_messages(callback) {
+        $.getJSON('/api/messages', function (messages) {
+            callback(messages);
+        })
+        .fail(function(xhr, status) {
+            console.log("Failed: " + status);
+        });
+}
+
 function edit_form(id) {
         $.get('/edit_form/' + id, function (f) {
             console.log('f: ');

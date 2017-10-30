@@ -132,3 +132,11 @@ def comment_task(task_id):
         comment = data['comment']
         services.update_task_add_comment(flask_login.current_user, task_id, comment)
     return make_response(jsonify(), 200)
+
+
+@app.route('/api/messages', methods=['GET'])
+@flask_login.login_required
+def messages():
+    all = services.find_unseen_messages()
+    services.update_messages_as_seen()
+    return make_response(jsonify([t.to_json() for t in all]), 200)

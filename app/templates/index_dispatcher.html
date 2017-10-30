@@ -9,6 +9,11 @@
 <div class="container">
 
     <div class="row">
+        <div id="messages_div" class="col-12">
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-12">
             <button id="create_new_task_button" class="form-control btn btn-default">{{ _('Add') }}</button>
         </div>
@@ -82,6 +87,17 @@
         <%#.%>
         <option value="<% id %>" data-icon="glyphicon-user"><% username %></option>
         <%/.%>
+</script>
+
+<script id="messages_template" type="text/template">
+    <%#.%>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <% message %>
+    </div>
+    <%/.%>
 </script>
 
 <script id="mp_template" type="text/template">
@@ -226,9 +242,16 @@ function process_tasks(data) {
     var text = Mustache.render(template, tasks_global);
     $("#tasks").html(text);
 }
+function process_messages(data) {
+    var template = $("#messages_template").html();
+    var text = Mustache.render(template, data);
+    $("#messages_div").append(text);
+    $('.alert').show();
+}
 function run_periodically() {
     fetch_users(process_users);
     fetch_tasks(process_tasks);
+    fetch_messages(process_messages);
     console.log(users_global);
     console.log(tasks_global);
 }
@@ -282,6 +305,7 @@ $(function () {
     });
     fetch_users(process_users);
     fetch_tasks(process_tasks);
+    fetch_messages(process_messages);
     window.setInterval(run_periodically, 10000);
 });
 </script>

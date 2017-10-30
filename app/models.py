@@ -169,3 +169,23 @@ class Task(db.Model):
 
     def can_edit_task(self, user):
         return user.is_admin()
+
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_by = relationship(User, foreign_keys=(created_by_id,))
+    message = db.Column(db.String(100))
+    seen = db.Column(db.Boolean, default=False)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'created_at': self.created_at,
+            'created_by': self.created_by.username,
+            'message': self.message,
+            'seen': self.seen
+        }
