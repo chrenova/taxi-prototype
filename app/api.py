@@ -99,6 +99,15 @@ def update_task(task_id):
     return make_response(jsonify(), 201)
 
 
+@app.route('/api/tasks/<task_id>/status/claimed', methods=['PUT'])
+@flask_login.login_required
+def update_task_status_claimed(task_id):
+    data = request.get_json()
+    #TODO validate
+    services.update_task_status(flask_login.current_user, task_id, models.TaskStatus.CLAIMED, comment=data.get('comment'))
+    return make_response(jsonify(), 200)
+
+
 @app.route('/api/tasks/<task_id>/status/processing', methods=['PUT'])
 @flask_login.login_required
 def update_task_status_processing(task_id):
@@ -136,7 +145,19 @@ def comment_task(task_id):
 
 @app.route('/api/messages', methods=['GET'])
 @flask_login.login_required
-def messages():
+def get_messages():
     all = services.find_unseen_messages()
+    json_response = jsonify([t.to_json() for t in all])
     services.update_messages_as_seen()
-    return make_response(jsonify([t.to_json() for t in all]), 200)
+    return make_response(json_response, 200)
+
+
+@app.route('/api/tasks/<task_id>/messages', methods=['POST'])
+@flask_login.login_required
+def create_new_message(task_id):
+    data = request.get_json()
+    created_by = flask_login.current_user
+    message = data.get('message')
+    services.create_message(created_by, task_id, message)
+    # TODO: what if create_message failed???
+    return make_response(jsonify(), 201)

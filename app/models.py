@@ -178,6 +178,7 @@ class Message(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = relationship(User, foreign_keys=(created_by_id,))
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
     message = db.Column(db.String(100))
     seen = db.Column(db.Boolean, default=False)
 
@@ -186,6 +187,7 @@ class Message(db.Model):
             'id': self.id,
             'created_at': self.created_at,
             'created_by': self.created_by.username,
+            'task_id': self.task_id,
             'message': self.message,
             'seen': self.seen
         }

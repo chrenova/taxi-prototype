@@ -71,9 +71,11 @@ def update_task_status(user, task_id, status, **kwargs):
 
     if status == models.TaskStatus.NEW:
         pass
+    elif status == models.TaskStatus.CLAIMED:
+        task.status = models.TaskStatus.CLAIMED
+        task.assigned_to_id = user.id
     elif status == models.TaskStatus.PROCESSING:
         task.status = models.TaskStatus.PROCESSING
-        task.assigned_to_id = user.id
     elif status == models.TaskStatus.FINISHED:
         task.status = models.TaskStatus.FINISHED
         if 'price' in kwargs:
@@ -81,9 +83,9 @@ def update_task_status(user, task_id, status, **kwargs):
     else:
         pass
 
-    if 'comment' in kwargs:
-        c = task.comments + '\n' if task.comments else ''
-        task.comments = c + kwargs['comment']
+    # if 'comment' in kwargs:
+    #     c = task.comments + '\n' if task.comments else ''
+    #     task.comments = c + kwargs['comment']
 
     db.session.add(task_history)
     db.session.commit()
@@ -155,3 +157,10 @@ def find_unseen_messages():
 def update_messages_as_seen():
     models.Message.query.update({models.Message.seen: True})
     db.session.commit()
+
+
+def create_message(created_by, task_id, message):
+    message = models.Message(created_by=created_by, task_id=task_id, message=message)
+    db.session.add(message)
+    db.session.commit()
+    return message

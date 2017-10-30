@@ -50,7 +50,7 @@
                 <td><% time_to_arrive_calculated %> min</td>
                 <td>
                     <div class="btn-group-vertical">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#actionModal" data-task_id="<% id %>" data-available_actions="<% available_actions %>">{{ _('SelectAction') }}</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#action_modal" data-task_id="<% id %>" data-available_actions="<% available_actions %>">{{ _('SelectAction') }}</button>
                     </div>
                 </td>
             </tr>
@@ -60,7 +60,7 @@
 </script>
 
 
-<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="action_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -70,17 +70,30 @@
         </button>
       </div>
       <div class="modal-body">
-          <span id="errorMessage"></span>
+          <span id="action_error_message"></span>
         <form>
           <div class="form-group">
+              <div class="row">
+                <button type="button" class="btn btn-primary" id="claim_submit" style="display:none">{{ _('Claim') }}</button>
+              </div>
+              <div class="row">
+                <button type="button" class="btn btn-primary" id="start_progress_submit" style="display:none">{{ _('StartProgress') }}</button>
+              </div>
+              <div class="row">
+            <button type="button" class="btn btn-primary" id="request_call_customer_submit" style="display:none">{{ _('RequestCallCustomer') }}</button>
+              </div>
+              <div class="row">
+            <button type="button" class="btn btn-primary" id="request_call_me_submit" style="display:none">{{ _('RequestCallMe') }}</button>
+              </div>
+              <div class="row">
+            <button type="button" class="btn btn-primary" id="change_route_submit" style="display:none">{{ _('ChangeRoute') }}</button>
+              </div>
+              <div class="row">
+            <input class="form-control" type="text" name="real_price" id="real_price" placeholder="{{ _('RealPrice') }}" style="display:none"/>
+            <button type="button" class="btn btn-primary" id="finish_submit" style="display:none">{{ _('Finish') }}</button>
+              </div>
             <input type="hidden" id="task_id"/>
-            <button type="button" class="btn btn-primary" id="claimSubmit" style="display:none">{{ _('Claim') }}</button>
-            <button type="button" class="btn btn-primary" id="startProgressSubmit" style="display:none">{{ _('StartProgress') }}</button>
-            <button type="button" class="btn btn-primary" id="requestCallCustomerSubmit" style="display:none">{{ _('RequestCallCustomer') }}</button>
-            <button type="button" class="btn btn-primary" id="requestCallMeSubmit" style="display:none">{{ _('RequestCallMe') }}</button>
-            <button type="button" class="btn btn-primary" id="changeRouteSubmit" style="display:none">{{ _('ChangeRoute') }}</button>
-            <button type="button" class="btn btn-primary" id="finishSubmit" style="display:none">{{ _('Finish') }}</button>
-          </div>
+         </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -106,6 +119,48 @@ function run_periodically() {
 $(function () {
     fetch_tasks(process_tasks);
     window.setInterval(run_periodically, 10000);
+});
+
+        var done_callback = function(xhr, status) {
+            console.log('Done: ' + status);
+            $('#action_modal').modal('hide');
+            fetch_tasks(process_tasks);
+        }
+        var fail_callback = function(xhr, status) {
+            console.log('Fail: ' + status);
+            $('#action_error_message').text('FAIL');
+        }
+
+$('#claim_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    claim_task(task_id, null, done_callback, fail_callback);
+});
+$('#start_progress_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    start_progress(task_id, null, done_callback, fail_callback);
+});
+$('#finish_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    var real_price = $("#real_price").val()
+    finish_task(task_id, null, real_price, done_callback, fail_callback);
+});
+$('#request_call_customer_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    send_message(task_id, 'request_call_customer_submit', done_callback, fail_callback);
+});
+$('#request_call_me_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    send_message(task_id, 'request_call_me_submit', done_callback, fail_callback);
+});
+$('#change_route_submit').on('click', function(event) {
+    event.preventDefault();
+    var task_id = $("#task_id").val()
+    send_message(task_id, 'change_route_submit', done_callback, fail_callback);
 });
 </script>
 {% endblock %}

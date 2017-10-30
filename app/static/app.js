@@ -58,7 +58,20 @@ function add_comment(task_id, comment) {
     });
 }
 
-function start_progress(task_id, comment) {
+function claim_task(task_id, comment, done_callback, fail_callback) {
+    data = {'comment': comment};
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tasks/' + task_id + '/status/claimed',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(done_callback)
+    .fail(fail_callback);
+}
+
+function start_progress(task_id, comment, done_callback, fail_callback) {
     data = {'comment': comment};
     $.ajax({
         type: 'PUT',
@@ -67,18 +80,11 @@ function start_progress(task_id, comment) {
         dataType: 'json',
         contentType: 'application/json'
     })
-    .done(function(xhr, status) {
-        console.log('Done: ' + status);
-        $('#startProgressModal').modal('hide');
-        fetch_tasks();
-    })
-    .fail(function(xhr, status) {
-        console.log('Fail: ' + status);
-        $('#errorMessage').text('FAIL');
-    });
+    .done(done_callback)
+    .fail(fail_callback);
 }
 
-function finish_task(task_id, comment, price) {
+function finish_task(task_id, comment, price, done_callback, fail_callback) {
     data = {'comment': comment, 'price': price};
     $.ajax({
         type: 'PUT',
@@ -87,16 +93,8 @@ function finish_task(task_id, comment, price) {
         dataType: 'json',
         contentType: 'application/json'
     })
-    .done(function(xhr, status) {
-        console.log('Done: ' + status);
-        $('#finishTaskModal').modal('hide');
-        fetch_tasks();
-    })
-    .fail(function(xhr, status) {
-        console.log('Fail: ' + status);
-        console.log('Fail: ' + xhr.responseText);
-        $('#errorMessage').text('FAIL');
-    });
+    .done(done_callback)
+    .fail(fail_callback);
 }
 
 function archive_task(task_id, comment) {
@@ -119,11 +117,24 @@ function archive_task(task_id, comment) {
     });
 }
 
+function send_message(task_id, message, done_callback, fail_callback) {
+    data = {'task_id': task_id, 'message': message};
+    $.ajax({
+        type: 'POST',
+        url: '/api/tasks/' + task_id + '/messages',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json'
+    })
+    .done(done_callback)
+    .fail(fail_callback);
+}
+
 $('#claimSubmit').on('click', function(event) {
     console.log($('#task_id').val());
 });
 
-$('#actionModal').on('shown.bs.modal', function(event) {
+$('#action_modal').on('shown.bs.modal', function(event) {
     console.log('SHOWN');
     var button = $(event.relatedTarget);
     var task_id = button.data('task_id');
@@ -133,22 +144,23 @@ $('#actionModal').on('shown.bs.modal', function(event) {
     console.log(available_actions_str);
     var available_actions = available_actions_str.split(',');
     if (available_actions.includes('can_claim') === true) {
-        $('#claimSubmit').show();
+        $('#claim_submit').show();
     }
     if (available_actions.includes('can_start_progress') === true) {
-        $('#startProgressSubmit').show();
+        $('#start_progress_submit').show();
     }
     if (available_actions.includes('can_request_call_customer') === true) {
-        $('#requestCallCustomerSubmit').show();
+        $('#request_call_customer_submit').show();
     }
     if (available_actions.includes('can_request_call_me') === true) {
-        $('#requestCallMeSubmit').show();
+        $('#request_call_me_submit').show();
     }
     if (available_actions.includes('can_change_route') === true) {
-        $('#changeRouteSubmit').show();
+        $('#change_route_submit').show();
     }
     if (available_actions.includes('can_finish_task') === true) {
-        $('#finishSubmit').show();
+        $('#finish_submit').show();
+        $('#real_price').show();
     }
 
 /*
@@ -166,12 +178,12 @@ $('#actionModal').on('shown.bs.modal', function(event) {
 })
 .on('show.bs.modal', function(event) {
     console.log('SHOW');
-    $('#claimSubmit').hide();
-    $('#finishSubmit').hide();
-    $('#startProgressSubmit').hide();
-    $('#requestCallCustomerSubmit').hide();
-    $('#requestCallMeSubmit').hide();
-    $('#changeRouteSubmit').hide();
+    $('#claim_submit').hide();
+    $('#finish_submit').hide();
+    $('#start_progress_submit').hide();
+    $('#request_call_customer_submit').hide();
+    $('#request_call_me_submit').hide();
+    $('#change_route_submit').hide();
     $('#task_id').val(null);
 });
 
