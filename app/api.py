@@ -52,7 +52,7 @@ def create_new_task():
     comment = data.get('comment')
     estimated_price = data.get('estimated_price') or None
     time_to_arrive = data.get('time_to_arrive') or None
-    planned_at = None  # FIXME
+    planned_at = data.get('planned_at') or None
     # TODO validate()
 
     services.create_task(

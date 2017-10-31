@@ -1,4 +1,5 @@
 import os
+import pytz
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -16,6 +17,8 @@ class Config(object):
         'en': 'English',
         'sk': 'Slovensky'
     }
+    UTC_TIMEZONE = pytz.timezone('UTC')
+    LOCAL_TIMEZONE = pytz.timezone('Europe/Bratislava')
 
 
 class ProductionConfig(Config):

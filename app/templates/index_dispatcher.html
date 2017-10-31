@@ -25,6 +25,12 @@
         <div class="form-group">
           <div class="col-sm-12 input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input class="form-control" type="text" name="planned_at" id="planned_at" placeholder="{{ _('PlannedAt') }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
               <select class="form-control" name="assigned_to" id="assigned_to" title="Zvoľ šoféra">
               </select>
           </div>
@@ -162,6 +168,12 @@
         <div class="form-group">
           <div class="col-sm-12 input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input class="form-control" type="text" name="edit_planned_at" id="edit_planned_at" placeholder="{{ _('PlannedAt') }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12 input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
             <select class="form-control" name="assigned_to" id="edit_assigned_to" title="Zvoľ šoféra"></select>
           </div>
         </div>
@@ -261,6 +273,7 @@ $(function () {
         $('#create_new_task_div').show();
     });
     $('#create_new_task_submit').on('click', function(event) {
+        var planned_at = $("#planned_at").val()
         var assigned_to = $("#assigned_to").val()
         var origin = $("#origin").val()
         var destination = $("#destination").val()
@@ -277,7 +290,7 @@ $(function () {
             console.log('Fail: ' + status);
             $('#create_new_task_error_message').text('FAIL');
         }
-        create_new_task(assigned_to, origin, destination, comment, time_to_arrive, estimated_price, done_callback, fail_callback);
+        create_new_task(planned_at, assigned_to, origin, destination, comment, time_to_arrive, estimated_price, done_callback, fail_callback);
     });
     $('#edit_task_submit').on('click', function(event) {
         event.preventDefault();
@@ -305,6 +318,9 @@ $(function () {
     fetch_tasks(process_tasks);
     fetch_messages(process_messages);
     window.setInterval(run_periodically, 10000);
+
+    $('#planned_at').appendDtpicker();
+    $('#edit_planned_at').appendDtpicker();
 });
 </script>
 {% endblock %}

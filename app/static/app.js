@@ -227,6 +227,7 @@ $('#edit_modal')
     $.each(users_global, function(i, obj) {
         options[options.length] = new Option(obj['username'], obj['id']);
     });
+    $('#edit_planned_at').val(task['planned_at']);
     $('#edit_assigned_to').val(task['assigned_to_id']);
     $('#edit_status').val(task['status']);
     $('#edit_task_id').val(task_id);
@@ -258,8 +259,9 @@ function addCommnet(element){
   $('#exampleModal').modal('toggle');
 }
 
-function create_new_task(assigned_to, origin, destination, comment, time_to_arrive, estimated_price, done_callback, fail_callback) {
+function create_new_task(planned_at, assigned_to, origin, destination, comment, time_to_arrive, estimated_price, done_callback, fail_callback) {
     data = {
+        'planned_at': planned_at,
         'comment': comment,
         'assigned_to': assigned_to,
         'origin': origin,

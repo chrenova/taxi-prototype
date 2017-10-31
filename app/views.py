@@ -86,37 +86,3 @@ def index():
         return render_template('index_dispatcher.html')
     else:
         return render_template('index_driver.html')
-
-
-@app.route('/edit_form/<task_id>', methods=['GET'])
-@flask_login.login_required
-def edit_form(task_id):
-    task = services.get_task(task_id, flask_login.current_user)
-    form = forms.CreateTaskForm(obj=task)
-    # form.origin = task.origin
-    form.assigned_to.choices = []
-    return render_template('edit_form.html', form=form)
-
-
-@app.route('/create_task', methods=['POST'])
-@flask_login.login_required
-def create_task():
-    assigned_to_id = request.form['assigned_to_id']
-    assigned_to = services.find_user_by_id(int(assigned_to_id))
-    origin = request.form['origin']
-    destination = request.form['destination']
-    comment = request.form['comment']
-    estimated_price = request.form['estimated_price']
-    time_to_arrive = request.form['time_to_arrive']
-    planned_at = None  # FIXME
-    services.create_task(
-        created_by=flask_login.current_user,
-        planned_at=planned_at,
-        assigned_to=assigned_to,
-        origin=origin,
-        destination=destination,
-        comments=comment,
-        estimated_price=estimated_price,
-        time_to_arrive=time_to_arrive
-    )
-    return redirect(url_for('index'))
