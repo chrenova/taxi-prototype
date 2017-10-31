@@ -319,8 +319,8 @@ $(function () {
     fetch_messages(process_messages);
     window.setInterval(run_periodically, 10000);
 
-    $('#planned_at').appendDtpicker();
-    $('#edit_planned_at').appendDtpicker();
+    $("#planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
+    $("#edit_planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
 });
 </script>
 {% endblock %}

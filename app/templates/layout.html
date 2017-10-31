@@ -13,8 +13,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
   <script>Mustache.tags = [ '<%', '%>' ];</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
-  <script src="{{ url_for('static', filename='jquery.simple-dtpicker.js') }}"></script>
-  <link href="{{ url_for('static', filename='jquery.simple-dtpicker.css') }}" rel="stylesheet">
+<!--  <script src="{{ url_for('static', filename='jquery.simple-dtpicker.js') }}"></script>
+  <link href="{{ url_for('static', filename='jquery.simple-dtpicker.css') }}" rel="stylesheet">-->
+  <script src="{{ url_for('static', filename='bootstrap-datetimepicker.min.js') }}"></script>
+  <link href="{{ url_for('static', filename='bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 
   <title>{% block title %}Welcome{% endblock %} | prototype</title>
 </head>
