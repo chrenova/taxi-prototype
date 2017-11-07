@@ -4,7 +4,7 @@ import enum
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship, backref
-from . import db, login_manager
+from . import db, login_manager, app
 from datetime import datetime, timedelta
 from flask_babel import lazy_gettext as _
 
@@ -111,9 +111,9 @@ class Task(db.Model):
     def to_json(self, user):
         return {
             'id': self.id,
-            'created_at': self.created_at,
+            'created_at': self.created_at.strftime(app.config['DATETIME_FORMAT']),
             'created_by': self.created_by.username,
-            'planned_at': self.planned_at,
+            'planned_at': self.planned_at.strftime(app.config['DATETIME_FORMAT']) if self.planned_at is not None else None,
             'assigned_to': self.assigned_to.username if self.assigned_to is not None else None,
             'assigned_to_id': self.assigned_to_id,
             'origin': self.origin,

@@ -77,6 +77,19 @@
 
   <div class="row">
       <div class="col">
+          <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-primary active">
+                  <input type="radio" name="day_filter" id="day_filter_today" autocomplete="off" checked> {{ _('Today') }}
+              </label>
+              <label class="btn btn-primary">
+                  <input type="radio" name="day_filter" id="day_filter_next_days" autocomplete="off"> {{ _('NextDays') }}
+              </label>
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col">
           <div id="tasks"></div>
       </div>
   </div>
@@ -243,6 +256,8 @@
 <script>
 var users_global = [];
 var tasks_global = [];
+var day_filter_global = DAY_FILTER_TYPES.TODAY;
+
 function process_users(data) {
     users_global = data;
 }
@@ -260,7 +275,7 @@ function process_messages(data) {
 }
 function run_periodically() {
     fetch_users(process_users);
-    fetch_tasks(process_tasks);
+    fetch_tasks(day_filter_global, process_tasks);
     fetch_messages(process_messages);
     console.log(users_global);
     console.log(tasks_global);
@@ -284,7 +299,7 @@ $(function () {
         var done_callback = function(xhr, status) {
             console.log('Done: ' + status);
             $('#create_new_task_div').hide();
-            fetch_tasks(process_tasks);
+            fetch_tasks(day_filter_global, process_tasks);
         }
         var fail_callback = function(xhr, status) {
             console.log('Fail: ' + status);
@@ -294,6 +309,7 @@ $(function () {
     });
     $('#edit_task_submit').on('click', function(event) {
         event.preventDefault();
+        var planned_at = $("#edit_planned_at").val()
         var task_id = $("#edit_task_id").val()
         var assigned_to = $("#edit_assigned_to").val()
         var origin = $("#edit_origin").val()
@@ -306,21 +322,31 @@ $(function () {
         var done_callback = function(xhr, status) {
             console.log('Done: ' + status);
             $('#edit_modal').modal('hide');
-            fetch_tasks(process_tasks);
+            fetch_tasks(day_filter_global, process_tasks);
         }
         var fail_callback = function(xhr, status) {
             console.log('Fail: ' + status);
             $('#edit_task_error_message').text('FAIL');
         }
-        update_task(task_id, assigned_to, origin, destination, status, comment, time_to_arrive, estimated_price, real_price, done_callback, fail_callback);
+        update_task(task_id, planned_at, assigned_to, origin, destination, status, comment, time_to_arrive, estimated_price, real_price, done_callback, fail_callback);
     });
     fetch_users(process_users);
-    fetch_tasks(process_tasks);
+    fetch_tasks(day_filter_global, process_tasks);
     fetch_messages(process_messages);
     window.setInterval(run_periodically, 10000);
 
     $("#planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
     $("#edit_planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
+
+    $('#day_filter_today, #day_filter_next_days').on('change', function(event) {
+        console.log(event.target);
+        if (event.target.id === DAY_FILTER_TYPES.TODAY) {
+            day_filter_global = DAY_FILTER_TYPES.TODAY;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS;
+        }
+        console.log(day_filter_global);
+    });
 });
 </script>
 {% endblock %}

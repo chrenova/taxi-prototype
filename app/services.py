@@ -49,6 +49,7 @@ def update_task(task_id, created_by, planned_at, assigned_to_id, origin, destina
     task_history = _copy_task(task)
 
     task.created_by = created_by
+    print('planned_at: {}'.format(planned_at))
     task.planned_at = planned_at
     task.assigned_to_id = assigned_to_id
     task.origin = origin
@@ -113,6 +114,13 @@ def update_task_add_comment(user, task_id, comment):
 
 
 def find_active_tasks_for_user(user):
+    if user.is_admin():
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.archived==False)
+    else:
+        return models.Task.query.filter(models.Task.parent_task==None, models.Task.assigned_to_id==user.id, models.Task.archived==False)
+
+
+def find_future_tasks_for_user(user):
     if user.is_admin():
         return models.Task.query.filter(models.Task.parent_task==None, models.Task.archived==False)
     else:

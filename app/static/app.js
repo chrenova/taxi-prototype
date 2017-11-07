@@ -1,7 +1,17 @@
+var DAY_FILTER_TYPES = {TODAY: 'day_filter_today', NEXT_DAYS: 'day_filter_next_days'};
+
 $("#btn").on('click', fetch_tasks);
 
-function fetch_tasks(callback) {
-        $.getJSON('/api/tasks', function (tasks) {
+function fetch_tasks(day_filter, callback) {
+        var route;
+        if (day_filter === DAY_FILTER_TYPES.TODAY) {
+            route = '/api/tasks';
+        } else if (day_filter === DAY_FILTER_TYPES.NEXT_DAYS) {
+            route = '/api/future_tasks';
+        } else {
+            //???
+        }
+        $.getJSON(route, function (tasks) {
             callback(tasks);
         })
         .fail(function(xhr, status) {
@@ -280,8 +290,9 @@ function create_new_task(planned_at, assigned_to, origin, destination, comment, 
     .fail(fail_callback);
 }
 
-function update_task(task_id, assigned_to, origin, destination, status, comment, time_to_arrive, estimated_price, real_price, done_callback, fail_callback) {
+function update_task(task_id, planned_at, assigned_to, origin, destination, status, comment, time_to_arrive, estimated_price, real_price, done_callback, fail_callback) {
     data = {
+        'planned_at': planned_at,
         'comment': comment,
         'assigned_to': assigned_to,
         'origin': origin,

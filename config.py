@@ -19,6 +19,7 @@ class Config(object):
     }
     UTC_TIMEZONE = pytz.timezone('UTC')
     LOCAL_TIMEZONE = pytz.timezone('Europe/Bratislava')
+    DATETIME_FORMAT = '%Y-%m-%d %H:%M'
 
 
 class ProductionConfig(Config):

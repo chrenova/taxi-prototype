@@ -106,6 +106,8 @@
 <script src="{{url_for('static', filename='app.js')}}"></script>
 <script>
 var tasks_global = [];
+var day_filter_global = DAY_FILTER_TYPES.TODAY;
+
 function process_tasks(data) {
     tasks_global = data;
     var template = $("#mp_template").html();
@@ -113,11 +115,11 @@ function process_tasks(data) {
     $("#tasks").html(text);
 }
 function run_periodically() {
-    fetch_tasks(process_tasks);
+    fetch_tasks(day_filter_global, process_tasks);
     console.log(tasks_global);
 }
 $(function () {
-    fetch_tasks(process_tasks);
+    fetch_tasks(day_filter_global, process_tasks);
     window.setInterval(run_periodically, 10000);
 });
 

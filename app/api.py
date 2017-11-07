@@ -35,6 +35,13 @@ def tasks():
     return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
 
 
+@app.route('/api/future_tasks', methods=['GET'])
+@flask_login.login_required
+def future_tasks():
+    all = services.find_future_tasks_for_user(flask_login.current_user)
+    return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
+
+
 @app.route('/api/tasks/<task_id>', methods=['GET'])
 @flask_login.login_required
 def get(task_id):
@@ -80,7 +87,7 @@ def update_task(task_id):
     estimated_price = data.get('estimated_price') or None
     real_price = data.get('real_price') or None
     time_to_arrive = data.get('time_to_arrive') or None
-    planned_at = None  # FIXME
+    planned_at = data.get('planned_at') or None
     # TODO validate()
 
     services.update_task(
