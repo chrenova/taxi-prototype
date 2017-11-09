@@ -2,18 +2,25 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
-    <link rel="stylesheet" href="./test.css"/>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
+    <meta charset="UTF-8" content="text/html">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="./test.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <script>Mustache.tags = ['<%', '%>'];</script>
 
-    <title>Welcome | MiniTwit</title>
+    <title>TaxiPrototype</title>
 </head>
 <body style="">
 <div class="container-fluid">
@@ -31,102 +38,101 @@
         </div>
         <div class=col-lg-10>
             <div id="body" class="container">
-                <div id="create_task" class="row">
-                    <div class="col-12">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-sm-12 input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <select class="form-control" name="assigned_to_id" id="assigned_to_id"
-                                            title="Zvoľ šoféra">
-                                        <option value="1" data-icon="glyphicon-user">Miso</option>
-                                        <option value="2" data-icon="glyphicon-user">Fero</option>
-                                        <option value="3" data-icon="glyphicon-user">Jozo</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12 input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                    <input class="form-control" type="text" name="origin" id="origin"
-                                           placeholder="Štart">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12 input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                    <input class="form-control" type="text" name="destination" id="destination"
-                                           placeholder="Cieľ">
-                                </div>
-                            </div>
-                            <div class="form-group">
 
-                                <div class="col-sm-12 input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                                    <input class="form-control" type="text" name="comment" id="comment"
-                                           placeholder="Poznámka">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="form-control btn btn-default" onclick="addOrder()" type="button">
-                                        Vytvor
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div><!-- create teask -->
                 <div class="row">
-                    <div class="col"
-                    <div
-                    ="" >
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <td>Poradie</td>
-                            <td>Vytvorené</td>
-                            <td>Zadal</td>
-                            <td>Priradené</td>
-                            <td>Štart</td>
-                            <td>Cieľ</td>
-                            <td>Komentár</td>
-                            <td>Stav</td>
-                            <td>Archivovaná</td>
-                            <td>Cena</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        </thead>
-                        <tbody id="tasks">
-                        <tr>
-                            <td>10</td>
-                            <td>28 Sep 2017 22:03:47 GMT</td>
-                            <td>Miso</td>
-                            <td>Fero</td>
-                            <td>Hviezdoslavova</td>
-                            <td>Kalvária</td>
-                            <td style="white-space:pre" class="koment"></td>
-                            <td class="nezacala">Nezačala</td>
-                            <td>nie</td>
-                            <td></td>
-                            <td>
-                                <div class="btn-group-vertical">
-                                    <button type="submit" class="assign btn btn-default btn-md"
-                                            onClick="preberObjednavku(this)">Preber objednávku
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-md" id="addCommnet"
-                                            data-toggle="modal" data-target="#exampleModal">Pridaj komentár
-                                    </button>
-                                    <button id="finish" type="submit" class="btn btn-default btn-md"
-                                            onClick="ukonciObjednavku(this)">Objednávka ukončená
-                                    </button>
-                                    <button type="submit" class="btn btn-default btn-md" onClick="">Edituj</buton>
+                    <div class="col">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td>Vytvorená</td>
+                                <td>Odkiaľ</td>
+                                <td>Kam</td>
+                                <td>Poznámka</td>
+                                <td>Čas na vybavenie</td>
+                                <td>Navrhovaná cena</td>
+                                <td>Priradené</td>
+                                <td>Stav</td>
+                                <td>&nbsp;</td>
+
+                            </tr>
+                            </thead>
+                            <tbody id="tasks">
+                            <tr>
+                                <td>28 Sep 2017 22:03:47</td>
+                                <td>Hviezdoslavova</td>
+                                <td>Kalvária</td>
+                                <td style="white-space:pre" class="koment"></td>
+                                <td>10</td>
+                                <td>2.50</td>
+                                <td>Fero</td>
+                                <td class="nezacala">Nezačala</td>
+                                <td>
+                                    <div class="btn-group-vertical">
+                                        <button type="submit" class="assign btn btn-default btn-md"
+                                                onClick="preberObjednavku(this)">Preber objednávku
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-md" id="addCommnet"
+                                                data-toggle="modal" data-target="#exampleModal">Pridaj komentár
+                                        </button>
+                                        <button id="finish" type="submit" class="btn btn-default btn-md"
+                                                onClick="ukonciObjednavku(this)">Objednávka ukončená
+                                        </button>
+                                        <button type="submit" class="btn btn-default btn-md" onClick="">Edituj</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="create_task" class="row">
+                        <div class="col-12">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-12 input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <select class="form-control" name="assigned_to_id" id="assigned_to_id"
+                                                title="Zvoľ šoféra">
+                                            <option value="1" data-icon="glyphicon-user">Miso</option>
+                                            <option value="2" data-icon="glyphicon-user">Fero</option>
+                                            <option value="3" data-icon="glyphicon-user">Jozo</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                <div class="form-group">
+                                    <div class="col-sm-12 input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                        <input class="form-control" type="text" name="origin" id="origin"
+                                               placeholder="Štart">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12 input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                        <input class="form-control" type="text" name="destination" id="destination"
+                                               placeholder="Cieľ">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    <div class="col-sm-12 input-group">
+                                        <span class="input-group-addon"><i
+                                                class="glyphicon glyphicon-list-alt"></i></span>
+                                        <input class="form-control" type="text" name="comment" id="comment"
+                                               placeholder="Poznámka">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <button class="form-control btn btn-default" onclick="addOrder()" type="button">
+                                            Vytvor
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+
             </div>
 
             <!--- modal -->
