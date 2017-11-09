@@ -1,307 +1,331 @@
-
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
-<link rel="stylesheet" href="./test.css"/>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-<!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css"/>
+    <link rel="stylesheet" href="./test.css"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
 
-<script>Mustache.tags = [ '<%', '%>' ];</script>
+    <script>Mustache.tags = ['<%', '%>'];</script>
 
-<title>Welcome | MiniTwit</title>
+    <title>Welcome | MiniTwit</title>
 </head>
-<body  style="">
+<body style="">
 <div class="container-fluid">
-  <div id="navigation" class="row">
-    <div class="navigation col-lg-2">
-      <div class="row">
-        <div class="col-lg-12">&lt;User qwerty&gt;</div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12"><a href="/index">index</a> |</div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12"><a href="/logout">sign out [qwerty]</a></div>
-      </div>
-    </div>
-    <div class=col-lg-10>
-  <div id="body" class="container">
-      <div id="create_task" class="row">
-        <div class="col-12">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <div class="col-sm-12 input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <select class="form-control" name="assigned_to_id" id="assigned_to_id" title="Zvoľ šoféra">
-                    <option value="1" data-icon="glyphicon-user">Miso</option>
-                    <option value="2" data-icon="glyphicon-user">Fero</option>
-                    <option value="3" data-icon="glyphicon-user">Jozo</option>
-                </select>
-              </div>
+    <div id="navigation" class="row">
+        <div class="navigation col-lg-2">
+            <div class="row">
+                <div class="col-lg-12">&lt;User qwerty&gt;</div>
             </div>
-            <div class="form-group">
-              <div class="col-sm-12 input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                <input class="form-control" type="text" name="origin" id="origin" placeholder="Štart">
-              </div>
+            <div class="row">
+                <div class="col-lg-12"><a href="/index">index</a> |</div>
             </div>
-            <div class="form-group">
-              <div class="col-sm-12 input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                <input class="form-control" type="text" name="destination" id="destination" placeholder="Cieľ">
-              </div>
+            <div class="row">
+                <div class="col-lg-12"><a href="/logout">sign out [qwerty]</a></div>
             </div>
-            <div class="form-group">
-
-              <div class="col-sm-12 input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-                <input class="form-control" type="text" name="comment" id="comment" placeholder="Poznámka">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-12">
-                <button class="form-control btn btn-default" onclick="addOrder()" type="button">Vytvor</button>
-            </div>
-            </div>
-          </form>
         </div>
-    </div><!-- create teask -->
-    <div class="row">
-        <div class="col" <div="" >
-        <table class="table table-bordered" >
-            <thead>
-                <tr><td>Poradie</td>
-                <td>Vytvorené</td>
-                <td>Zadal</td>
-                <td>Priradené</td>
-                <td>Štart</td>
-                <td>Cieľ</td>
-                <td>Komentár</td>
-                <td>Stav</td>
-                <td>Archivovaná</td>
-                <td>Cena</td>
-                <td>&nbsp;</td>
-            </tr></thead>
-            <tbody id="tasks">
-            <tr>
-                <td>10</td>
-                <td>28 Sep 2017 22:03:47 GMT</td>
-                <td>Miso</td>
-                <td>Fero</td>
-                <td>Hviezdoslavova</td>
-                <td>Kalvária</td>
-                <td style="white-space:pre" class="koment"></td>
-                <td class="nezacala">Nezačala</td>
-                <td>nie</td>
-                <td></td>
-                <td>
-                  <div class="btn-group-vertical">
-                    <button  type="submit"  class="assign btn btn-default btn-md" onClick="preberObjednavku(this)">Preber objednávku</button>
-                    <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
-                    <button id="finish" type="submit"  class="btn btn-default btn-md" onClick="ukonciObjednavku(this)">Objednávka ukončená</button>
-                    <button type="submit"  class="btn btn-default btn-md" onClick="">Edituj</buton>
-                  </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-      </div>
-</div>
+        <div class=col-lg-10>
+            <div id="body" class="container">
+                <div id="create_task" class="row">
+                    <div class="col-12">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-12 input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <select class="form-control" name="assigned_to_id" id="assigned_to_id"
+                                            title="Zvoľ šoféra">
+                                        <option value="1" data-icon="glyphicon-user">Miso</option>
+                                        <option value="2" data-icon="glyphicon-user">Fero</option>
+                                        <option value="3" data-icon="glyphicon-user">Jozo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                    <input class="form-control" type="text" name="origin" id="origin"
+                                           placeholder="Štart">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                    <input class="form-control" type="text" name="destination" id="destination"
+                                           placeholder="Cieľ">
+                                </div>
+                            </div>
+                            <div class="form-group">
 
-<!--- modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="message-text" class="form-control-label">Komentár:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
-        <button type="button" class="btn btn-primary" id="add-comment-btn">Pridaj</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-$('#exampleModal').on('show.bs.modal', function(e) {
-  $('#message-text').val("");
-  $('#add-comment-btn').unbind();
-  $('#add-comment-btn').on('click', function(){
-    addCommnet(e.relatedTarget);
-    $(e.relatedTarget).addClass("btn-info");
-  });
+                                <div class="col-sm-12 input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                                    <input class="form-control" type="text" name="comment" id="comment"
+                                           placeholder="Poznámka">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="form-control btn btn-default" onclick="addOrder()" type="button">
+                                        Vytvor
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- create teask -->
+                <div class="row">
+                    <div class="col"
+                    <div
+                    ="" >
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td>Poradie</td>
+                            <td>Vytvorené</td>
+                            <td>Zadal</td>
+                            <td>Priradené</td>
+                            <td>Štart</td>
+                            <td>Cieľ</td>
+                            <td>Komentár</td>
+                            <td>Stav</td>
+                            <td>Archivovaná</td>
+                            <td>Cena</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        </thead>
+                        <tbody id="tasks">
+                        <tr>
+                            <td>10</td>
+                            <td>28 Sep 2017 22:03:47 GMT</td>
+                            <td>Miso</td>
+                            <td>Fero</td>
+                            <td>Hviezdoslavova</td>
+                            <td>Kalvária</td>
+                            <td style="white-space:pre" class="koment"></td>
+                            <td class="nezacala">Nezačala</td>
+                            <td>nie</td>
+                            <td></td>
+                            <td>
+                                <div class="btn-group-vertical">
+                                    <button type="submit" class="assign btn btn-default btn-md"
+                                            onClick="preberObjednavku(this)">Preber objednávku
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-md" id="addCommnet"
+                                            data-toggle="modal" data-target="#exampleModal">Pridaj komentár
+                                    </button>
+                                    <button id="finish" type="submit" class="btn btn-default btn-md"
+                                            onClick="ukonciObjednavku(this)">Objednávka ukončená
+                                    </button>
+                                    <button type="submit" class="btn btn-default btn-md" onClick="">Edituj</buton>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!--- modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Pridaj komentár</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Zavri">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="message-text" class="form-control-label">Komentár:</label>
+                                    <textarea class="form-control" id="message-text"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Zavri</button>
+                            <button type="button" class="btn btn-primary" id="add-comment-btn">Pridaj</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $('#exampleModal').on('show.bs.modal', function (e) {
+                    $('#message-text').val("");
+                    $('#add-comment-btn').unbind();
+                    $('#add-comment-btn').on('click', function () {
+                        addCommnet(e.relatedTarget);
+                        $(e.relatedTarget).addClass("btn-info");
+                    });
 
 
-});
-</script>
-<!-- moDAL -->
+                });
+            </script>
+            <!-- moDAL -->
 
 
+            <div id="start_progress_div" style="display: none;">
+            </div>
+            <script id="mp_template" type="text/template">
+                <tr>
+                    <td>10</td>
+                    <td>28 Sep 2017 22:03:47 GMT</td>
+                    <td><% created_by %></td>
+                    <td><% assigned_to %></td>
+                    <td><% origin %></td>
+                    <td><% destination %></td>
+                    <td style="white-space:pre" class="koment"><% comment %></td>
+                    <td class="nezacala">Nezačala</td>
+                    <td>nie</td>
+                    <td></td>
+                    <td>
+                        <div class="btn-group-vertical">
+                            <button type="submit" class="assign btn btn-default btn-md"
+                                    onClick="preberObjednavku(this)">Preber objednávku
+                            </button>
+                            <button type="button" class="btn btn-default btn-md" id="addCommnet" data-toggle="modal"
+                                    data-target="#exampleModal">Pridaj komentár
+                            </button>
+                            <button id="finish" type="submit" class="btn btn-default btn-md"
+                                    onClick="ukonciObjednavku(this)">Objednávka ukončená
+                            </button>
+                            <button type="submit" class="btn btn-default btn-md" onClick="">Edituj</buton>
+                        </div>
+                    </td>
+                </tr>
+            </script>
+            <script>
+                function addOrder() {
+                    var assigned_to = $('#assigned_to_id').val();
+                    var origin = $('#origin').val();
+                    var destination = $('#destination').val();
+                    var comment = $('#comment').val();
 
-<div id="start_progress_div" style="display: none;">
-</div>
-<script id="mp_template" type="text/template">
-<tr>
-    <td>10</td>
-    <td>28 Sep 2017 22:03:47 GMT</td>
-    <td><% created_by %></td>
-    <td><% assigned_to %></td>
-    <td><% origin %></td>
-    <td><% destination %></td>
-    <td style="white-space:pre" class="koment"><% comment %></td>
-    <td class="nezacala">Nezačala</td>
-    <td>nie</td>
-    <td></td>
-    <td>
-        <div class="btn-group-vertical">
-          <button  type="submit"  class="assign btn btn-default btn-md" onClick="preberObjednavku(this)">Preber objednávku</button>
-          <button type="button"  class="btn btn-default btn-md" id="addCommnet" data-toggle="modal" data-target="#exampleModal" >Pridaj komentár</button>
-          <button id="finish" type="submit"  class="btn btn-default btn-md" onClick="ukonciObjednavku(this)">Objednávka ukončená</button>
-          <button type="submit"  class="btn btn-default btn-md" onClick="">Edituj</buton>
+                    var obj = {
+                        created_by: 'Generálny riaditeľ Michal Huska Predceda',
+                        assigned_to: assigned_to,
+                        origin: origin,
+                        destination: destination,
+                        comment: comment
+                    };
+                    var template = $("#mp_template").html();
+                    var text = Mustache.render(template, obj);
+                    $("#tasks").append(text);
+                    return false;
+                }
+
+                function addCommnet(element) {
+                    var commentEl = $(element).closest('td').siblings('.koment');
+                    var previousText = commentEl.html();
+
+                    var addedText = $('#message-text').val();
+                    if (previousText) {
+                        commentEl.html(previousText);
+                        commentEl.append("<br/>").append(addedText);
+                    }
+                    else {
+                        commentEl.append(addedText);
+                    }
+                    $('#exampleModal').modal('toggle');
+                }
+
+                function preberObjednavku(element) {
+                    $(element).closest('td').siblings('.nezacala').text("Prebieha");
+                    $(element).hide();
+                    return false;
+                }
+
+                function ukonciObjednavku(element) {
+                    $(element).closest('td').siblings('.nezacala').text("Vybavená");
+                    $(element).closest('button').siblings('.assign').hide();
+                    $(element).hide();
+                    return false;
+                }
+
+
+            </script>
+
+            <script id="mp_template" type="text/template">
+                <table class="table table-bordered">
+                    <thead>
+                    <td>ID</td>
+                    <td>Created At</td>
+                    <td>Created By</td>
+                    <td>Assigned To</td>
+                    <td>Origin</td>
+                    <td>Destination</td>
+                    <td>Comments</td>
+                    <td>Status</td>
+                    <td>Archived</td>
+                    <td>Price</td>
+                    <td>&nbsp;</td>
+                    </thead>
+                    <tbody>
+                    <%#.%>
+                    <tr>
+                        <td><% id %></td>
+                        <td><% created_at %></td>
+                        <td><% created_by %></td>
+                        <td><% assigned_to %></td>
+                        <td><% origin %></td>
+                        <td><% destination %></td>
+                        <td style="white-space:pre"><% comments %></td>
+                        <td><% status %></td>
+                        <td><% archived %></td>
+                        <td><% value %></td>
+                        <td>
+                            <%#can_start_progress %>
+                            <form action="/start_progress/<% id %>" method="post">
+                                <div class="form-group"><input type="submit" value="Start progress"
+                                                               class="form-control"/></div>
+                            </form>
+                            <%/can_start_progress %>
+                            <%#can_add_comment %>
+                            <form action="/comment_task/<% id %>" method="post">
+                                <div class="form-group"><input type="submit" value="Add comment" class="form-control"/>
+                                </div>
+                            </form>
+                            <%/can_add_comment %>
+                            <%#can_finish_task %>
+                            <form action="/finish_task/<% id %>" method="post">
+                                <div class="form-group"><input type="submit" value="Finish task" class="form-control"/>
+                                </div>
+                            </form>
+                            <%/can_finish_task %>
+                            <%#can_archive_task %>
+                            <form action="/archive_task/<% id %>" method="post">
+                                <div class="form-group"><input type="submit" value="Archive task" class="form-control"/>
+                                </div>
+                            </form>
+                            <%/can_archive_task %>
+                            <%#can_edit_task %>
+                            <form action="/edit_task/<% id %>" method="post">
+                                <div class="form-group"><input type="submit" value="Edit task" class="form-control"/>
+                                </div>
+                            </form>
+                            <%/can_edit_task %>
+                        </td>
+                    </tr>
+                    <%/.%>
+                    </tbody>
+                </table>
+            </script>
+
+            <script>
+            </script>
+
+
+        </div><!-- BODY -->
+        <div class="footer">
+            footer
         </div>
-    </td>
-</tr>
-</script>
-<script>
-function addOrder(){
-    var assigned_to = $('#assigned_to_id').val();
-    var origin = $('#origin').val();
-    var destination = $('#destination').val();
-    var comment = $('#comment').val();
-
-    var obj = {
-      created_by:'Generálny riaditeľ Michal Huska Predceda',
-      assigned_to:assigned_to,
-      origin:origin,
-      destination:destination,
-      comment:comment
-    };
-    var template = $("#mp_template").html();
-    var text = Mustache.render(template, obj);
-    $("#tasks").append(text);
-    return false;
-}
-
-function addCommnet(element){
-  var commentEl = $(element).closest('td').siblings('.koment');
-  var previousText = commentEl.html();
-
-  var addedText = $('#message-text').val();
-  if(previousText){
-      commentEl.html(previousText);
-      commentEl.append("<br/>").append(addedText);
-  }
-  else{
-    commentEl.append(addedText);
-  }
-  $('#exampleModal').modal('toggle');
-}
-
-function preberObjednavku(element){
-  $(element).closest('td').siblings('.nezacala').text("Prebieha");
-  $(element).hide();
-  return false;
-}
-function ukonciObjednavku(element){
-  $(element).closest('td').siblings('.nezacala').text("Vybavená");
-  $(element).closest('button').siblings('.assign').hide();
-  $(element).hide();
-  return false;
-}
-
-
-</script>
-
-<script id="mp_template" type="text/template">
-        <table class="table table-bordered">
-            <thead>
-                <td>ID</td>
-                <td>Created At</td>
-                <td>Created By</td>
-                <td>Assigned To</td>
-                <td>Origin</td>
-                <td>Destination</td>
-                <td>Comments</td>
-                <td>Status</td>
-                <td>Archived</td>
-                <td>Price</td>
-                <td>&nbsp;</td>
-            </thead>
-            <tbody>
-            <%#.%>
-            <tr>
-                <td><% id %></td>
-                <td><% created_at %></td>
-                <td><% created_by %></td>
-                <td><% assigned_to %></td>
-                <td><% origin %></td>
-                <td><% destination %></td>
-                <td style="white-space:pre"><% comments %></td>
-                <td><% status %></td>
-                <td><% archived %></td>
-                <td><% value %></td>
-                <td>
-                    <%#can_start_progress %>
-                    <form action="/start_progress/<% id %>" method="post">  <div class="form-group"><input type="submit" value="Start progress" class="form-control"/></div></form>
-                    <%/can_start_progress %>
-                    <%#can_add_comment %>
-                    <form action="/comment_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Add comment" class="form-control"/></div></form>
-                    <%/can_add_comment %>
-                    <%#can_finish_task %>
-                    <form action="/finish_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Finish task" class="form-control"/></div></form>
-                    <%/can_finish_task %>
-                    <%#can_archive_task %>
-                    <form action="/archive_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Archive task" class="form-control"/></div></form>
-                    <%/can_archive_task %>
-                    <%#can_edit_task %>
-                    <form action="/edit_task/<% id %>" method="post"><div class="form-group"><input type="submit" value="Edit task" class="form-control"/></div></form>
-                    <%/can_edit_task %>
-                </td>
-            </tr>
-            <%/.%>
-            </tbody>
-        </table>
-</script>
-
-<script>
-// function fetch_tasks() {
-//         $.getJSON('http://localhost:5000/tasks', function (tasks) {
-//             var template = $("#mp_template").html();
-//             var text = Mustache.render(template, tasks);
-//             $("#tasks").html(text);
-//         });
-// }
-
-// $(function () {
-//     $("#btn").on('click', fetch_tasks);
-//     fetch_tasks();
-//     window.setInterval(fetch_tasks, 10000);
-// });
-</script>
-
-
-  </div><!-- BODY -->
-  <div class="footer">
-      footer
-  </div>
-</div>
+    </div>
 
 </body>
 </html>
