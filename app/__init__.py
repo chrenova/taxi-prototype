@@ -14,4 +14,17 @@ login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-from app import views, models, api
+from .main import main_blueprint
+app.register_blueprint(main_blueprint)
+from .auth import auth_blueprint
+app.register_blueprint(auth_blueprint, url_prefix='/auth')
+from .messages import messages_blueprint
+app.register_blueprint(messages_blueprint, url_prefix='/api/messages')
+from .tasks import tasks_blueprint
+app.register_blueprint(tasks_blueprint, url_prefix='/api/tasks')
+from .users import users_blueprint
+app.register_blueprint(users_blueprint, url_prefix='/api/users')
+from .shifts import shifts_blueprint
+app.register_blueprint(shifts_blueprint, url_prefix='/api/shifts')
+
+from app import models

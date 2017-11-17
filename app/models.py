@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     hashed_password = db.Column(db.String(160))
     admin = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(self, username, password="changeme123", admin=False, active=True):
         self.username = username
@@ -52,9 +53,9 @@ class User(UserMixin, db.Model):
     def to_json(self, user):
         return {
             'id': self.id,
-            'username': self.username
+            'username': self.username,
+            'last_seen': self.last_seen.strftime(app.config['DATETIME_FORMAT']) if self.last_seen is not None else None,
         }
-
 
 
 @login_manager.user_loader
@@ -107,6 +108,10 @@ class Task(db.Model):
 
     def __repr__(self):
         return '<Task {0} {1} {2} {3} {4} {5} {6}>'.format(self.id, self.created_at, self.updated_at, self.status, self.archived, self.parent_task_id, self.history)
+
+    def from_json(self, data):
+        # TODO: implement
+        pass
 
     def to_json(self, user):
         return {
@@ -190,4 +195,20 @@ class Message(db.Model):
             'task_id': self.task_id,
             'message': self.message,
             'seen': self.seen
+        }
+
+
+class Shift(db.Model):
+    __tablename__ = 'shifts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = relationship(User, foreign_keys=(user_id,))
+    started_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'started_at': self.started_at,
+            'user': self.user.username
         }

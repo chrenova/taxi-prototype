@@ -1,98 +1,104 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    {% if current_user.is_authenticated %}
-        {{ current_user }}
-    {% endif %}
+{% if current_user.is_authenticated %}
+{{ current_user }}
+{% endif %}
 
 <script>console.log(moment('2012-12-31T23:55:13Z').format('LLLL'));</script>
 
-    <div class="row">
-        <div id="messages_div" class="col-12">
-        </div>
+<div class="row">
+    <div id="messages_div" class="col-12">
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-12">
-            <button id="create_new_task_button" class="btn btn-primary">{{ _('Add') }}</button>
-        </div>
-    </div>
-
-  <div id="create_new_task_div" class="row" style="display: none">
-    <div class="col-12">
+<div id="create_new_task_div" class="row">
+    <div class="col-8">
+        <button id="create_new_task_button" class="btn btn-primary">{{ _('Add') }}</button>
         <span id="create_new_task_error_message"></span>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input class="form-control" type="text" name="planned_at" id="planned_at" placeholder="{{ _('PlannedAt') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-              <select class="form-control" name="assigned_to" id="assigned_to" title="Zvoľ šoféra">
-              </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="origin" id="origin" placeholder="{{ _('Origin') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="destination" id="destination" placeholder="{{ _('Destination') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="comment" id="comment" placeholder="{{ _('Comment') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="estimated_price" id="estimated_price" placeholder="{{ _('EstimatedPrice') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="time_to_arrive" id="time_to_arrive" placeholder="{{ _('TimeToArrive') }}">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12">
-            <button id="create_new_task_submit" class="btn btn-primary">{{ _('CreateTask') }}</button>
-        </div>
-        </div>
-      </form>
+        <fieldset id="create_new_task_fieldset" disabled>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input class="form-control" type="text" name="planned_at" id="planned_at"
+                               placeholder="{{ _('PlannedAt') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <select class="form-control" name="assigned_to" id="assigned_to" title="Zvoľ šoféra">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input class="form-control" type="text" name="origin" id="origin"
+                               placeholder="{{ _('Origin') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input class="form-control" type="text" name="destination" id="destination"
+                               placeholder="{{ _('Destination') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        <input class="form-control" type="text" name="comment" id="comment"
+                               placeholder="{{ _('Comment') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        <input class="form-control" type="text" name="estimated_price" id="estimated_price"
+                               placeholder="{{ _('EstimatedPrice') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                        <input class="form-control" type="text" name="time_to_arrive" id="time_to_arrive"
+                               placeholder="{{ _('TimeToArrive') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button id="create_new_task_submit" class="btn btn-primary">{{ _('CreateTask') }}</button>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
     </div>
-  </div>
+    <div class="col-4">
+        <div id="users_list"></div>
+    </div>
+</div>
 
 
-  <div class="row">
-      <div class="col">
-          <div class="btn-group" data-toggle="buttons">
-              <label class="btn btn-primary active">
-                  <input type="radio" name="day_filter" id="day_filter_today" autocomplete="off" checked> {{ _('Today') }}
-              </label>
-              <label class="btn btn-primary">
-                  <input type="radio" name="day_filter" id="day_filter_next_days" autocomplete="off"> {{ _('NextDays') }}
-              </label>
-          </div>
-      </div>
-  </div>
+<div class="row">
+    <div class="col">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="radio" name="day_filter" id="day_filter_today" autocomplete="off" checked> {{ _('Today') }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days" autocomplete="off"> {{ _('NextDays') }}
+            </label>
+        </div>
+    </div>
+</div>
 
-  <div class="row">
-      <div class="col">
-          <div id="tasks"></div>
-      </div>
-  </div>
+<div class="row">
+    <div class="col">
+        <div id="tasks"></div>
+    </div>
+</div>
 
 
 <div id="start_progress_div" style="display: none;">
@@ -100,10 +106,10 @@
 
 
 <script id="users_template" type="text/template">
-        <option value="" data-icon="glyphicon-user"></option>
-        <%#.%>
-        <option value="<% id %>" data-icon="glyphicon-user"><% username %></option>
-        <%/.%>
+    <option value="" data-icon="glyphicon-user"></option>
+    <%#.%>
+    <option value="<% id %>" data-icon="glyphicon-user"><% username %></option>
+    <%/.%>
 </script>
 
 <script id="messages_template" type="text/template">
@@ -117,139 +123,173 @@
     <%/.%>
 </script>
 
-<script id="mp_template" type="text/template">
+<script id="users_table_template" type="text/template">
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <td>{{ _('Id') }}</td>
-                <td>{{ _('CreatedAt') }}</td>
-                <td>{{ _('CreatedBy') }}</td>
-                <td>{{ _('PlannedAt') }}</td>
-                <td>{{ _('Assignee') }}</td>
-                <td>{{ _('Origin') }}</td>
-                <td>{{ _('Destination') }}</td>
-                <td>{{ _('Comments') }}</td>
-                <td>{{ _('Status') }}</td>
-                <td>{{ _('Archived') }}</td>
-                <td>{{ _('EstimatedPrice') }}</td>
-                <td>{{ _('RealPrice') }}</td>
-                <td>{{ _('TimeToArrive') }}</td>
-                <td>{{ _('TimeToArriveCalculated') }}</td>
-                <td>&nbsp;</td>
-            </tr>
+        <tr>
+            <th>{{ _('Username') }}</th>
+            <th>{{ _('LastSeen') }}</th>
+        </tr>
         </thead>
         <tbody>
-            <%#.%>
-            <tr>
-                <td><% id %></td>
-                <td><% created_at %></td>
-                <td><% created_by %></td>
-                <td><% planned_at %></td>
-                <td><% assigned_to %></td>
-                <td><% origin %></td>
-                <td><% destination %></td>
-                <td style="white-space:pre" class="koment"><% comments %></td>
-                <td class="nezacala"><% status_localized %></td>
-                <td><% archived %></td>
-                <td><% estimated_price %></td>
-                <td><% real_price %></td>
-                <td><% time_to_arrive %> min</td>
-                <td><% time_to_arrive_calculated %> min</td>
-                <td>
-                    <div class="btn-group-vertical">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit_modal" data-task_id="<% id %>">{{ _('Edit') }}</button>
-                    </div>
-                </td>
-            </tr>
-            <%/.%>
+        <%#.%>
+        <tr>
+            <td><% username %></td>
+            <td><% last_seen %></td>
+        </tr>
+        <%/.%>
         </tbody>
     </table>
 </script>
 
-<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">{{ _('Edit') }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <span id="edit_task_error_message"></span>
-      <form class="form-horizontal" id="edit_form">
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input class="form-control" type="text" name="edit_planned_at" id="edit_planned_at" placeholder="{{ _('PlannedAt') }}">
-          </div>
+<script id="mp_template" type="text/template">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>{{ _('Id') }}</th>
+            <th>{{ _('CreatedAt') }}</th>
+            <th>{{ _('CreatedBy') }}</th>
+            <th>{{ _('PlannedAt') }}</th>
+            <th>{{ _('Assignee') }}</th>
+            <th>{{ _('Origin') }}</th>
+            <th>{{ _('Destination') }}</th>
+            <th>{{ _('Comments') }}</th>
+            <th>{{ _('Status') }}</th>
+            <th>{{ _('Archived') }}</th>
+            <th>{{ _('EstimatedPrice') }}</th>
+            <th>{{ _('RealPrice') }}</th>
+            <th>{{ _('TimeToArrive') }}</th>
+            <th>{{ _('TimeToArriveCalculated') }}</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%#.%>
+        <tr>
+            <td><% id %></td>
+            <td><% created_at %></td>
+            <td><% created_by %></td>
+            <td><% planned_at %></td>
+            <td><% assigned_to %></td>
+            <td><% origin %></td>
+            <td><% destination %></td>
+            <td style="white-space:pre" class="koment"><% comments %></td>
+            <td class="nezacala"><% status_localized %></td>
+            <td><% archived %></td>
+            <td><% estimated_price %></td>
+            <td><% real_price %></td>
+            <td><% time_to_arrive %> min</td>
+            <td><% time_to_arrive_calculated %> min</td>
+            <td>
+                <div class="btn-group-vertical">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit_modal"
+                            data-task_id="<% id %>">{{ _('Edit') }}
+                    </button>
+                </div>
+            </td>
+        </tr>
+        <%/.%>
+        </tbody>
+    </table>
+</script>
+
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ _('Edit') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Cancel') }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span id="edit_task_error_message"></span>
+                <form class="form-horizontal" id="edit_form">
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input class="form-control" type="text" name="edit_planned_at" id="edit_planned_at"
+                                   placeholder="{{ _('PlannedAt') }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <select class="form-control" name="assigned_to" id="edit_assigned_to"
+                                    title="Zvoľ šoféra"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <select class="form-control" name="status" id="edit_status" title="{{ _('Status') }}">
+                                <option value="NEW" data-icon="glyphicon-user">{{ _('TaskStatus.NEW') }}</option>
+                                <option value="CLAIMED" data-icon="glyphicon-user">{{ _('TaskStatus.CLAIMED') }}
+                                </option>
+                                <option value="PROCESSING" data-icon="glyphicon-user">{{ _('TaskStatus.PROCESSING') }}
+                                </option>
+                                <option value="FINISHED" data-icon="glyphicon-user">{{ _('TaskStatus.FINISHED') }}
+                                </option>
+                                <option value="CANCELLED" data-icon="glyphicon-user">{{ _('TaskStatus.CANCELLED') }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                            <input class="form-control" type="text" name="origin" id="edit_origin"
+                                   placeholder="{{ _('Origin') }}" value="<%task.origin%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                            <input class="form-control" type="text" name="destination" id="edit_destination"
+                                   placeholder="{{ _('Destination') }}" value="<%task.destination%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            <input class="form-control" type="text" name="comment" id="edit_comment"
+                                   placeholder="{{ _('Comment') }}" value="<%task.comments%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            <input class="form-control" type="text" name="estimated_price" id="edit_estimated_price"
+                                   placeholder="{{ _('EstimatedPrice') }}" value="<%task.estimated_price%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            <input class="form-control" type="text" name="real_price" id="edit_real_price"
+                                   placeholder="{{ _('RealPrice') }}" value="<%task.real_price%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+                            <input class="form-control" type="text" name="time_to_arrive" id="edit_time_to_arrive"
+                                   placeholder="{{ _('TimeToArrive') }}" value="<%task.time_to_arrive%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="hidden" id="edit_task_id"/>
+                            <button id="edit_task_submit" class="btn btn-primary">{{ _('Save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
         </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <select class="form-control" name="assigned_to" id="edit_assigned_to" title="Zvoľ šoféra"></select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <select class="form-control" name="status" id="edit_status" title="{{ _('Status') }}">
-              <option value="NEW" data-icon="glyphicon-user">{{ _('TaskStatus.NEW') }}</option>
-              <option value="CLAIMED" data-icon="glyphicon-user">{{ _('TaskStatus.CLAIMED') }}</option>
-              <option value="PROCESSING" data-icon="glyphicon-user">{{ _('TaskStatus.PROCESSING') }}</option>
-              <option value="FINISHED" data-icon="glyphicon-user">{{ _('TaskStatus.FINISHED') }}</option>
-              <option value="CANCELLED" data-icon="glyphicon-user">{{ _('TaskStatus.CANCELLED') }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="origin" id="edit_origin" placeholder="{{ _('Origin') }}" value="<%task.origin%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-            <input class="form-control" type="text" name="destination" id="edit_destination" placeholder="{{ _('Destination') }}" value="<%task.destination%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="comment" id="edit_comment" placeholder="{{ _('Comment') }}" value="<%task.comments%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="estimated_price" id="edit_estimated_price" placeholder="{{ _('EstimatedPrice') }}" value="<%task.estimated_price%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="real_price" id="edit_real_price" placeholder="{{ _('RealPrice') }}" value="<%task.real_price%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12 input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
-            <input class="form-control" type="text" name="time_to_arrive" id="edit_time_to_arrive" placeholder="{{ _('TimeToArrive') }}" value="<%task.time_to_arrive%>">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-12">
-              <input type="hidden" id="edit_task_id"/>
-            <button id="edit_task_submit" class="btn btn-primary">{{ _('Save') }}</button>
-        </div>
-        </div>
-      </form>
-      </div>
-      <div class="modal-footer">
-      </div>
     </div>
-  </div>
 </div>
 
 <script src="{{url_for('static', filename='app.js')}}"></script>
@@ -260,6 +300,9 @@ var day_filter_global = DAY_FILTER_TYPES.TODAY;
 
 function process_users(data) {
     users_global = data;
+    var users_table_template = $("#users_table_template").html();
+    var text = Mustache.render(users_table_template, users_global);
+    $("#users_list").html(text);
 }
 function process_tasks(data) {
     tasks_global = data;
@@ -282,10 +325,10 @@ function run_periodically() {
 }
 $(function () {
     $('#create_new_task_button').on('click', function(event) {
-        var template = $("#users_template").html();
-        var text = Mustache.render(template, users_global);
+        $('#create_new_task_fieldset').prop('disabled', false);
+        var users_template = $("#users_template").html();
+        var text = Mustache.render(users_template, users_global);
         $("#assigned_to").html(text);
-        $('#create_new_task_div').show();
     });
     $('#create_new_task_submit').on('click', function(event) {
         var planned_at = $("#planned_at").val()
@@ -346,7 +389,10 @@ $(function () {
             day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS;
         }
         console.log(day_filter_global);
+        fetch_tasks(day_filter_global, process_tasks);
     });
 });
+
+
 </script>
 {% endblock %}

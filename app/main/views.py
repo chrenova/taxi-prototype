@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 import flask_login
-from app import app, services, babel, forms
+from app import app, babel
+from app.users import services as user_services, forms
 # from config import LANGUAGES
 
 
@@ -10,26 +11,11 @@ def get_locale():
     return 'sk'
 
 
-'''
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-
-    user = services.valid_login(request.form['username'], request.form['password'])
-    if user is not None:
-        flask_login.login_user(user)
-        return redirect(url_for('index'))
-    else:
-        return render_template('login.html')
-'''
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = forms.LoginForm()
     if form.validate_on_submit():
-        u = services.valid_login(form.username.data, form.password.data)
+        u = user_services.valid_login(form.username.data, form.password.data)
         if u is not None:
             flask_login.login_user(u)
             return redirect(url_for('index'))
@@ -46,7 +32,7 @@ def login():
 def register():
     form = forms.RegistrationForm()
     if form.validate_on_submit():
-        user = services.create_user(username=form.username.data, password=form.password.data, admin=form.admin.data, active=form.active.data)
+        user = user_services.create_user(username=form.username.data, password=form.password.data, admin=form.admin.data, active=form.active.data)
         flash('You have successfully registered! You may now login.')
 
         return redirect(url_for('login'))
@@ -63,19 +49,6 @@ def logout():
     flask_login.logout_user()
     flash('You have successfully been logged out.')
     return redirect(url_for('login'))
-
-
-@app.route('/create', methods=['GET', 'POST'])
-def create():
-    form = forms.CreateTaskForm()
-    if form.validate_on_submit():
-        flash('Created!!!')
-        return redirect(url_for('login'))
-
-    if form.errors:
-        flash(form.errors)
-
-    return redirect(url_for('index'))
 
 
 @app.route('/')
