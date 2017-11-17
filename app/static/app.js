@@ -7,7 +7,7 @@ function fetch_tasks(day_filter, callback) {
         if (day_filter === DAY_FILTER_TYPES.TODAY) {
             route = '/api/tasks';
         } else if (day_filter === DAY_FILTER_TYPES.NEXT_DAYS) {
-            route = '/api/future_tasks';
+            route = '/api/tasks/next_days';
         } else {
             //???
         }
@@ -131,7 +131,7 @@ function send_message(task_id, message, done_callback, fail_callback) {
     data = {'task_id': task_id, 'message': message};
     $.ajax({
         type: 'POST',
-        url: '/api/tasks/' + task_id + '/messages',
+        url: '/api/messages/tasks/' + task_id,
         data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json'
