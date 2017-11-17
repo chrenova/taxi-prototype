@@ -1,3 +1,31 @@
+
+.btn-round {
+    width: 40px;
+    height: 40px;
+    border-radius: 25%;
+    background-image: url("plus_1.png");
+    background-size: 40px 40px;
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+}
+
+.btn-round.btn-lg {
+    width: 40px;
+    height: 40px;
+}
+
+.btn-round.btn-sm {
+    width: 34px;
+    height: 34px;
+}
+
+.btn-round.btn-xs {
+    width: 24px;
+    height: 24px;
+}
+
+
+
 .row{
  border: 0px solid;
  }
