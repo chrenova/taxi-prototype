@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from flask import url_for as _url_for, current_app, _request_ctx_stack
 
@@ -22,3 +23,7 @@ def url_for(*args, **kwargs):
         with current_app.test_request_context():
             return _url_for(*args, **kwargs)
     return _url_for(*args, **kwargs)
+
+
+def current_datetime():
+    return datetime.now()

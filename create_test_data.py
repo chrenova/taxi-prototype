@@ -1,4 +1,5 @@
 import datetime
+from app.utils import current_datetime
 from app import db
 from app.models import Task, TaskStatus, User
 from app.tasks import services as task_services
@@ -15,7 +16,7 @@ def main():
     db.session.add_all([u1, u2, u3, u4])
     db.session.commit()
 
-    planned_tomorrow = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+    planned_tomorrow = current_datetime() + datetime.timedelta(hours=24)
     t1 = task_services.create_task(created_by=u1, planned_at=None, assigned_to_id=u2.id, origin='ba', destination='nr', status=TaskStatus.NEW, comments='short comment', estimated_price=5.5, time_to_arrive=10)
     task_services.create_task(created_by=u2, planned_at=None, assigned_to_id=u3.id, origin='nr', destination='', status=TaskStatus.PROCESSING, comments='', estimated_price=2.5, time_to_arrive=15)
     task_services.create_task(created_by=u3, planned_at=planned_tomorrow, assigned_to_id=u1.id, origin='ke', destination='po', status=TaskStatus.FINISHED, comments='short comment', estimated_price=5.5, time_to_arrive=10)

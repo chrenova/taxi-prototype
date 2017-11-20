@@ -13,10 +13,10 @@ def tasks():
     return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
 
 
-@tasks_blueprint.route('/next_days', methods=['GET'])
+@tasks_blueprint.route('/next_days/<day_filter>', methods=['GET'])
 @flask_login.login_required
-def future_tasks():
-    all = task_services.find_future_tasks_for_user(flask_login.current_user)
+def future_tasks(day_filter):
+    all = task_services.find_future_tasks_for_user(flask_login.current_user, day_filter)
     return make_response(jsonify([t.to_json(flask_login.current_user) for t in all]), 200)
 
 

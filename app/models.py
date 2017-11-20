@@ -5,7 +5,8 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship, backref
 from . import db, login_manager, app
-from datetime import datetime, timedelta
+from .utils import current_datetime
+from datetime import timedelta
 from flask_babel import lazy_gettext as _
 
 
@@ -17,7 +18,7 @@ class User(UserMixin, db.Model):
     hashed_password = db.Column(db.String(160))
     admin = db.Column(db.Boolean)
     active = db.Column(db.Boolean)
-    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=current_datetime)
 
     def __init__(self, username, password="changeme123", admin=False, active=True):
         self.username = username
@@ -75,11 +76,11 @@ class Task(db.Model):
     __tablename__ = 'tasks'
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=current_datetime)
+    updated_at = db.Column(db.DateTime, default=current_datetime, onupdate=current_datetime)
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = relationship(User, foreign_keys=(created_by_id,))
-    planned_at = db.Column(db.DateTime, default=datetime.utcnow)
+    planned_at = db.Column(db.DateTime, default=current_datetime)
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     assigned_to = relationship(User, foreign_keys=(assigned_to_id,))
     origin = db.Column(db.String(100))
@@ -103,7 +104,7 @@ class Task(db.Model):
     @property
     def time_to_arrive_calculated(self):
         planned = self.planned_at if self.planned_at is not None else self.created_at
-        td = planned.timestamp() - datetime.utcnow().timestamp() + timedelta(minutes=self.time_to_arrive).total_seconds()
+        td = planned.timestamp() - current_datetime().timestamp() + timedelta(minutes=self.time_to_arrive).total_seconds()
         return td // 60
 
     def __repr__(self):
@@ -180,7 +181,7 @@ class Message(db.Model):
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=current_datetime)
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = relationship(User, foreign_keys=(created_by_id,))
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'))
@@ -204,7 +205,7 @@ class Shift(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship(User, foreign_keys=(user_id,))
-    started_at = db.Column(db.DateTime, default=datetime.utcnow)
+    started_at = db.Column(db.DateTime, default=current_datetime)
 
     def to_json(self):
         return {

@@ -1,11 +1,13 @@
-import datetime
+from datetime import timedelta
 from app.models import Task, TaskStatus
+from app.utils import current_datetime
 from app import db
+from sqlalchemy import and_
 
 
 def create_task(created_by, planned_at, assigned_to_id, origin, destination, comments, estimated_price, time_to_arrive, status=TaskStatus.NEW):
     if planned_at is None:
-        planned_at = datetime.datetime.utcnow()
+        planned_at = current_datetime()
     print('estimated_price: {}, time_to_arrive: {}'.format(estimated_price, time_to_arrive))
     task = Task(
         created_by=created_by,
@@ -114,10 +116,32 @@ def find_active_tasks_for_user(user):
         return Task.query.filter(Task.parent_task==None, Task.assigned_to_id==user.id, Task.archived==False)
 
 
-def find_future_tasks_for_user(user):
+def find_future_tasks_for_user(user, day_filter):
+    today = current_datetime().date()
+    if (day_filter == 'day_filter_next_days_1'):
+        date_from = today + timedelta(days=1)
+        date_to = today + timedelta(days=2)
+    elif (day_filter == 'day_filter_next_days_2'):
+        date_from = today + timedelta(days=2)
+        date_to = today + timedelta(days=3)
+    elif (day_filter == 'day_filter_next_days_3'):
+        date_from = today + timedelta(days=3)
+        date_to = today + timedelta(days=4)
+    elif (day_filter == 'day_filter_next_days_4'):
+        date_from = today + timedelta(days=4)
+        date_to = today + timedelta(days=5)
+    elif (day_filter == 'day_filter_next_days_5'):
+        date_from = today + timedelta(days=5)
+        date_to = today + timedelta(days=6)
+    elif (day_filter == 'day_filter_next_days_rest'):
+        date_from = today + timedelta(days=6)
+        date_to = today + timedelta(days=365)
+
     if user.is_admin():
-        return Task.query.filter(Task.parent_task==None, Task.archived==False)
+        filter_rule = and_(Task.planned_at >= date_from, Task.planned_at < date_to, Task.parent_task==None, Task.archived==False)
+        return Task.query.filter(filter_rule)
     else:
+        # TODO
         return Task.query.filter(Task.parent_task==None, Task.assigned_to_id==user.id, Task.archived==False)
 
 
