@@ -1,6 +1,6 @@
-from datetime import datetime
 from app.models import User, load_user
 from app import db
+from app.utils import current_datetime
 
 
 def find_user_by_id(user_id):
@@ -34,6 +34,6 @@ def valid_login(username, password):
 
 
 def ping(user):
-    user.last_seen = datetime.utcnow()
+    user.last_seen = current_datetime()
     db.session.add(user)
     db.session.commit()

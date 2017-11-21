@@ -2,6 +2,8 @@ from flask import render_template, request, redirect, url_for, flash
 import flask_login
 from app import app, babel
 from app.users import services as user_services, forms
+from app.utils import current_datetime
+from datetime import timedelta
 # from config import LANGUAGES
 
 
@@ -56,6 +58,7 @@ def logout():
 @flask_login.login_required
 def index():
     if flask_login.current_user.is_admin():
-        return render_template('index_dispatcher.html')
+        days = {'NextDays{}'.format(i): (current_datetime() + timedelta(days=i)).strftime('%d.%m.') for i in range(1, 6)}
+        return render_template('index_dispatcher.html', days=days)
     else:
         return render_template('index_driver.html')

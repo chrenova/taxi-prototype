@@ -88,7 +88,22 @@
                 <input type="radio" name="day_filter" id="day_filter_today" autocomplete="off" checked> {{ _('Today') }}
             </label>
             <label class="btn btn-primary">
-                <input type="radio" name="day_filter" id="day_filter_next_days" autocomplete="off"> {{ _('NextDays') }}
+                <input type="radio" name="day_filter" id="day_filter_next_days_1" autocomplete="off"> {{ days.NextDays1 }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days_2" autocomplete="off"> {{ days.NextDays2 }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days_3" autocomplete="off"> {{ days.NextDays3 }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days_4" autocomplete="off"> {{ days.NextDays4 }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days_5" autocomplete="off"> {{ days.NextDays5 }}
+            </label>
+            <label class="btn btn-primary">
+                <input type="radio" name="day_filter" id="day_filter_next_days_rest" autocomplete="off"> {{ _('NextDaysRest') }}
             </label>
         </div>
     </div>
@@ -341,7 +356,7 @@ $(function () {
         event.preventDefault();
         var done_callback = function(xhr, status) {
             console.log('Done: ' + status);
-            $('#create_new_task_div').hide();
+            $('#create_new_task_fieldset').prop('disabled', true);
             fetch_tasks(day_filter_global, process_tasks);
         }
         var fail_callback = function(xhr, status) {
@@ -381,12 +396,22 @@ $(function () {
     $("#planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
     $("#edit_planned_at").datetimepicker({format: 'yyyy-mm-dd hh:ii', autoclose: true});
 
-    $('#day_filter_today, #day_filter_next_days').on('change', function(event) {
+    $('#day_filter_today, #day_filter_next_days_1, #day_filter_next_days_2, #day_filter_next_days_3, #day_filter_next_days_4, #day_filter_next_days_5, #day_filter_next_days_rest').on('change', function(event) {
         console.log(event.target);
         if (event.target.id === DAY_FILTER_TYPES.TODAY) {
             day_filter_global = DAY_FILTER_TYPES.TODAY;
-        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS) {
-            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_1) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_1;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_2) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_2;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_3) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_3;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_4) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_4;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_5) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_5;
+        } else if (event.target.id === DAY_FILTER_TYPES.NEXT_DAYS_REST) {
+            day_filter_global = DAY_FILTER_TYPES.NEXT_DAYS_REST;
         }
         console.log(day_filter_global);
         fetch_tasks(day_filter_global, process_tasks);

@@ -1,15 +1,21 @@
-var DAY_FILTER_TYPES = {TODAY: 'day_filter_today', NEXT_DAYS: 'day_filter_next_days'};
+var DAY_FILTER_TYPES = {
+    TODAY: 'day_filter_today',
+    NEXT_DAYS_1: 'day_filter_next_days_1',
+    NEXT_DAYS_2: 'day_filter_next_days_2',
+    NEXT_DAYS_3: 'day_filter_next_days_3',
+    NEXT_DAYS_4: 'day_filter_next_days_4',
+    NEXT_DAYS_5: 'day_filter_next_days_5',
+    NEXT_DAYS_REST: 'day_filter_next_days_rest'
+    };
 
 $("#btn").on('click', fetch_tasks);
 
 function fetch_tasks(day_filter, callback) {
         var route;
         if (day_filter === DAY_FILTER_TYPES.TODAY) {
-            route = '/api/tasks';
-        } else if (day_filter === DAY_FILTER_TYPES.NEXT_DAYS) {
-            route = '/api/tasks/next_days';
+            route = '/api/tasks/';
         } else {
-            //???
+            route = '/api/tasks/next_days/' + day_filter;
         }
         $.getJSON(route, function (tasks) {
             callback(tasks);
@@ -281,7 +287,7 @@ function create_new_task(planned_at, assigned_to, origin, destination, comment, 
     };
     $.ajax({
         type: 'POST',
-        url: '/api/tasks',
+        url: '/api/tasks/',
         data: JSON.stringify(data),
         dataType: 'json',
         contentType: 'application/json'
