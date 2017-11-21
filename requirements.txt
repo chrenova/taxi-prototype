@@ -6,3 +6,4 @@ Flask-WTF
 Flask-Migrate
 Flask-Script
 psycopg2
+gunicorn
