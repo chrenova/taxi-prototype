@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8" content="text/html">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8" content="text/html">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+  
+  
+  
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script type="application/javascript" src="taxi.vue.js"></script>
+  <link rel="stylesheet" href="css/taxi.css"/>
+    
+  <title>TaxiPrototype</title>
+</head>
+<body style="padding-bottom: 70px;">
+  <div id="app">
+    <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-11" id="content" role="tablist">
+        <ul class="nav nav-tabs" >
+          <week-days-tab v-for="day in task" v-bind:week-day="day"></week-days-tab>
+        </ul>
+        <div v-for="(day,index) in task" v-bind:id="day.id" role="tabpanel" class=" show active tab-pane fade" v-bind:aria-labelledby="day.id+'-tab'" >
+          <tasks-per-day v-bind:week-day="day"></tasks-per-day>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <script>
+    var app = init();    
+  </script>
+  
+<!-- MODAL WINDOWS END -->
+</body>
+</html>
